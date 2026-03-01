@@ -29,6 +29,11 @@
 }
 
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+
+/* ── MOBILE OVERRIDES ───────────────────────────────
+   This file is auto-generated from rallymind-prototype-v5.html.
+   Do not edit directly — make changes in v5, then regenerate.
+─────────────────────────────────────────────────── */
 body{
   font-family:'DM Sans',sans-serif;
   background:var(--surface);
@@ -37,41 +42,44 @@ body{
   overflow:hidden;
   display:flex;flex-direction:column;
 }
-/* Hide desktop-only elements */
 .meta-label{display:none;}
 
-/* PHONE — fills full screen on mobile */
+/* Phone fills real screen edge to edge */
 .phone{
-  width:100%;
-  height:100dvh;
+  width:100%;height:100dvh;
   background:var(--surface);
-  border-radius:0;
-  box-shadow:none;
-  overflow:hidden;
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  flex:1;
+  border-radius:0;box-shadow:none;
+  overflow:hidden;position:relative;
+  display:flex;flex-direction:column;flex:1;
 }
 
-/* Status bar — hidden on mobile (iOS shows its own) */
+/* Status bar hidden — iOS shows its own */
 .status-bar{display:none !important;height:0 !important;padding:0 !important;}
 
-/* Onboarding and signin inner wrap must fill full screen height —
-   this is what was causing content to appear only in bottom half */
-#screen-onboarding .ob-wrap,
-#screen-signin .si-wrap {
-  flex: 1;
-  min-height: 0;
+/* Safe area insets */
+.splash-wrap{
+  padding-top:max(60px, env(safe-area-inset-top, 44px));
+  padding-bottom:max(40px, env(safe-area-inset-bottom, 20px));
 }
-
-/* Nav — sits above iOS home indicator */
+.home-hd{padding-top:max(16px, env(safe-area-inset-top, 0px));}
+.page-hd{padding-top:max(14px, env(safe-area-inset-top, 0px));}
 .nav{
   padding:8px 0;
   padding-bottom:max(20px, env(safe-area-inset-bottom));
 }
+.sheet{
+  max-height:calc(92% - env(safe-area-inset-bottom));
+  padding-bottom:max(24px, env(safe-area-inset-bottom));
+}
 
-/* Touch sizing — bigger tap targets */
+/* Onboarding and signin — inner wrap fills full height */
+#screen-onboarding .ob-wrap,
+#screen-signin .si-wrap{
+  flex:1;min-height:0;
+  padding-top:max(56px, env(safe-area-inset-top, 44px));
+}
+
+/* Bigger touch targets */
 .nav-btn{padding:6px 0;}
 .nav-ico{font-size:24px;}
 .nav-lbl{font-size:10px;}
@@ -79,43 +87,7 @@ body{
 .pill{padding:8px 16px;font-size:11px;}
 .sheet-close{width:32px;height:32px;font-size:16px;}
 
-/* Sheet max height respects safe areas */
-.sheet{
-  max-height:calc(92% - env(safe-area-inset-bottom));
-  padding-bottom:max(24px, env(safe-area-inset-bottom));
-}
-
-/* Splash full-screen fix — safe area top padding only */
-.splash-wrap{
-  padding-top:max(60px, env(safe-area-inset-top, 44px));
-  padding-bottom:max(40px, env(safe-area-inset-bottom, 20px));
-}
-
-/* Onboarding + signin — stretch to fill full screen height */
-.ob-wrap{
-  flex:1;
-  min-height:0;
-  height:100%;
-  padding-top:max(56px, env(safe-area-inset-top, 44px));
-}
-.si-wrap{
-  flex:1;
-  min-height:0;
-  height:100%;
-  padding-top:max(56px, env(safe-area-inset-top, 44px));
-}
-
-/* Home header top padding */
-.home-hd{
-  padding-top:max(16px, env(safe-area-inset-top, 0px));
-}
-
-/* Page headers top padding */
-.page-hd{
-  padding-top:max(14px, env(safe-area-inset-top, 0px));
-}
-
-/* SCREENS — let the base class handle show/hide, never override display here */
+/* SCREENS */
 .screen{display:none;flex-direction:column;flex:1;overflow:hidden;min-height:0;}
 .screen.active{display:flex;}
 .scroll{overflow-y:auto;flex:1;}
@@ -1686,17 +1658,17 @@ function openGoalFab() { openAddGoal(); }
 function openGearFab() { openAddGear(); }
 
 /* ── REAL TIME CLOCK ─────────────────── */
-function updateClock() {
-  const el = document.getElementById('liveTime');
-  if (!el) return;
-  const now = new Date();
-  let h = now.getHours(), m = now.getMinutes();
-  const ampm = h >= 12 ? 'PM' : 'AM';
-  h = h % 12 || 12;
-  el.textContent = h + ':' + String(m).padStart(2,'0') + ' ' + ampm;
+function updateClock(){
+  const el=document.getElementById('liveTime');
+  if(!el)return;
+  const now=new Date();
+  let h=now.getHours(),m=now.getMinutes();
+  const ap=h>=12?'PM':'AM';
+  h=h%12||12;
+  el.textContent=h+':'+String(m).padStart(2,'0')+' '+ap;
 }
 updateClock();
-setInterval(updateClock, 10000);
+setInterval(updateClock,10000);
 
 /* ── GOAL / CHALLENGE ADD — type toggle ── */
 function gcToggleType(type) {
