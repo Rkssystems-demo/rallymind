@@ -1,0 +1,2130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="RallyMind">
+<meta name="theme-color" content="#1b5230">
+<title>RallyMind</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:wght@700;800&display=swap');
+
+:root {
+  --g900:#0d3320; --g800:#1b5230; --g700:#2a7a4b; --g600:#3daf6e;
+  --g100:#e8f5ee; --g50:#f2faf5;
+  --red:#c62828; --red-bg:#fce4ec;
+  --orange:#d4581a; --orange-bg:#fff0e6;
+  --gold:#e6a817; --gold-bg:#fff8e1;
+  --blue:#1565c0; --blue-bg:#e3f2fd;
+  --purple:#6a1b9a; --purple-bg:#f3e5f5;
+  --navy:#1b2d45; --text:#1b2d45; --text-mid:#4a5568;
+  --text-lt:#7a8fa6; --divider:#e4eaf0;
+  --surface:#f5f7fa; --white:#ffffff;
+  --sh-sm:0 1px 4px rgba(0,0,0,0.08);
+  --sh-md:0 4px 16px rgba(0,0,0,0.10);
+  --sh-lg:0 12px 40px rgba(0,0,0,0.14);
+  --r-xs:6px; --r-sm:10px; --r-md:16px; --r-lg:22px; --r-xl:28px;
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--surface);
+  margin:0;padding:0;
+  width:100vw;height:100dvh;
+  overflow:hidden;
+  display:flex;flex-direction:column;
+}
+/* Hide desktop-only elements */
+.meta-label{display:none;}
+
+/* PHONE — fills full screen on mobile */
+.phone{
+  width:100%;
+  height:100%;
+  background:var(--surface);
+  border-radius:0;
+  box-shadow:none;
+  overflow:hidden;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  flex:1;
+}
+
+/* Status bar — hidden on mobile (iOS shows its own) */
+.status-bar{display:none;}
+
+/* Nav — sits above iOS home indicator */
+.nav{
+  padding:8px 0;
+  padding-bottom:max(20px, env(safe-area-inset-bottom));
+}
+
+/* Touch sizing — bigger tap targets */
+.nav-btn{padding:6px 0;}
+.nav-ico{font-size:24px;}
+.nav-lbl{font-size:10px;}
+.fab{width:44px;height:44px;font-size:22px;}
+.pill{padding:8px 16px;font-size:11px;}
+.sheet-close{width:32px;height:32px;font-size:16px;}
+
+/* Sheet max height respects safe areas */
+.sheet{
+  max-height:calc(92% - env(safe-area-inset-bottom));
+  padding-bottom:max(24px, env(safe-area-inset-bottom));
+}
+
+/* Splash full-screen fix */
+.splash-wrap{
+  padding-top:max(60px, env(safe-area-inset-top, 44px));
+  padding-bottom:max(40px, env(safe-area-inset-bottom, 20px));
+}
+
+/* Onboarding + signin safe area */
+.ob-wrap, .si-wrap{
+  padding-top:max(56px, env(safe-area-inset-top, 44px));
+}
+
+/* Home header top padding */
+.home-hd{
+  padding-top:max(16px, env(safe-area-inset-top, 0px));
+}
+
+/* Page headers top padding */
+.page-hd{
+  padding-top:max(14px, env(safe-area-inset-top, 0px));
+}
+
+/* SCREENS */
+.screen{display:none;flex-direction:column;flex:1;overflow:hidden;}
+.screen.active{display:flex;}
+.scroll{overflow-y:auto;flex:1;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* NAV */
+.nav{background:var(--white);border-top:1px solid var(--divider);display:flex;padding:8px 0 20px;flex-shrink:0;}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;border:none;background:none;transition:all 0.18s;}
+.nav-ico{font-size:20px;line-height:1;transition:transform 0.18s;}
+.nav-lbl{font-size:9px;font-weight:600;color:var(--text-lt);letter-spacing:0.03em;text-transform:uppercase;}
+.nav-btn.active .nav-lbl{color:var(--g700);font-weight:700;}
+.nav-btn.active .nav-ico{transform:scale(1.18);}
+.nav-btn.active .nav-lbl::after{content:'';display:block;width:4px;height:4px;border-radius:50%;background:var(--g700);margin:2px auto 0;}
+
+/* SHARED */
+.page-hd{background:var(--white);padding:14px 20px 12px;border-bottom:1px solid var(--divider);flex-shrink:0;}
+.page-hd-row{display:flex;justify-content:space-between;align-items:center;}
+.page-hd-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);}
+.page-hd-sub{font-size:11px;color:var(--text-lt);font-weight:500;margin-top:2px;}
+
+.sec-hd{font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-lt);padding:16px 18px 6px;display:flex;justify-content:space-between;align-items:center;}
+.sec-hd-action{font-size:11px;font-weight:600;color:var(--g700);cursor:pointer;text-transform:none;letter-spacing:0;}
+
+.fab{width:32px;height:32px;border-radius:50%;background:var(--g700);color:white;border:none;font-size:20px;font-weight:300;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(42,122,75,0.4);transition:all 0.18s;flex-shrink:0;}
+.fab:active{transform:scale(0.93);}
+
+.pills{display:flex;gap:7px;padding:8px 18px;overflow-x:auto;flex-shrink:0;}
+.pills::-webkit-scrollbar{display:none;}
+.pill{white-space:nowrap;cursor:pointer;background:var(--surface);color:var(--text-lt);font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;border:1.5px solid var(--divider);transition:all 0.15s;}
+.pill.on{background:var(--g100);color:var(--g700);border-color:var(--g700);font-weight:700;}
+
+.dash-add{margin:4px 16px 16px;border:1.5px dashed var(--divider);border-radius:var(--r-md);padding:13px 16px;font-size:12px;font-weight:600;color:var(--text-lt);cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.15s;}
+.dash-add:hover{border-color:var(--g700);color:var(--g700);background:var(--g50);}
+
+/* TAGS — FIX #6 #7: str=green, wk=red */
+.tags{display:flex;flex-wrap:wrap;gap:5px;}
+.tag{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:0.04em;}
+.tag-str  {background:var(--g100);   color:var(--g700);}   /* GREEN — Strengths */
+.tag-wk   {background:var(--red-bg); color:var(--red);}    /* RED   — Weaknesses */
+.tag-neu  {background:var(--surface);color:var(--text-lt);border:1px solid var(--divider);}
+.tag-match    {background:var(--orange-bg);color:var(--orange);}
+.tag-lesson   {background:var(--blue-bg);  color:var(--blue);}
+.tag-practice {background:var(--g100);     color:var(--g700);}
+.tag-tech     {background:var(--g100);     color:var(--g700);}
+.tag-strategy {background:var(--blue-bg);  color:var(--blue);}
+.tag-mental   {background:var(--gold-bg);  color:#9a6000;}
+.tag-fitness  {background:var(--red-bg);   color:var(--red);}
+
+.prog-wrap{height:6px;background:var(--divider);border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:3px;transition:width 1s ease;}
+
+.toggle{width:44px;height:26px;border-radius:13px;position:relative;cursor:pointer;flex-shrink:0;transition:background 0.2s;background:var(--g700);}
+.toggle.off{background:var(--divider);}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:white;box-shadow:0 1px 4px rgba(0,0,0,0.2);transition:transform 0.2s;}
+.toggle:not(.off)::after{transform:translateX(18px);}
+
+.stars{color:var(--gold);font-size:13px;letter-spacing:1px;}
+
+.toast{position:absolute;top:66px;left:50%;transform:translateX(-50%) translateY(-80px);background:rgba(27,45,69,0.95);color:white;font-size:12px;font-weight:600;padding:10px 18px;border-radius:20px;white-space:nowrap;z-index:900;transition:transform 0.38s cubic-bezier(0.34,1.56,0.64,1);box-shadow:var(--sh-lg);max-width:340px;text-align:center;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* SPLASH */
+#screen-splash{background:linear-gradient(165deg,var(--g900) 0%,var(--g800) 45%,var(--g700) 100%);}
+.splash-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px 36px;text-align:center;position:relative;overflow:hidden;}
+.splash-wrap::before{content:'🎾';position:absolute;font-size:280px;opacity:0.055;top:-60px;right:-70px;transform:rotate(22deg);}
+.splash-wrap::after{content:'🎾';position:absolute;font-size:180px;opacity:0.04;bottom:40px;left:-50px;transform:rotate(-12deg);}
+.splash-mark{width:82px;height:82px;border-radius:22px;background:rgba(255,255,255,0.12);border:2px solid rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:42px;margin-bottom:22px;}
+.splash-name{font-family:'Playfair Display',serif;font-size:42px;font-weight:800;color:white;letter-spacing:-0.5px;margin-bottom:8px;}
+.splash-tagline{font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:40px;}
+.splash-sport-row{display:flex;gap:10px;margin-bottom:44px;}
+.splash-sport{padding:9px 20px;border-radius:30px;cursor:pointer;font-size:13px;font-weight:700;transition:all 0.2s;background:rgba(255,255,255,0.10);border:1.5px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.8);}
+.splash-sport.on{background:rgba(255,255,255,0.92);color:var(--g900);border-color:transparent;}
+.splash-cta{width:100%;padding:16px;background:white;color:var(--g900);border:none;border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:12px;box-shadow:0 6px 22px rgba(0,0,0,0.22);}
+.splash-signin{font-size:12px;font-weight:600;color:rgba(255,255,255,0.6);cursor:pointer;text-decoration:underline;background:none;border:none;font-family:'DM Sans',sans-serif;}
+
+/* HOME — Animation 1: animated gradient + floating particles */
+.home-hd{
+  padding:18px 20px 36px;color:white;position:relative;overflow:hidden;flex-shrink:0;
+  background:linear-gradient(135deg,#0d3320,#4a1070,#2a7a4b,#1b0a40,#1b5230,#6a1b9a,#0d3320);
+  background-size:400% 400%;
+  animation:hdrGradient 5s ease infinite;
+}
+@keyframes hdrGradient{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+.home-hd::before{
+  content:'🎾';position:absolute;right:-8px;top:-8px;font-size:96px;opacity:0.09;
+  animation:floatBall1 2.5s ease-in-out infinite;
+}
+.home-hd::after{
+  content:'🎾';position:absolute;left:14px;bottom:-22px;font-size:62px;opacity:0.06;
+  animation:floatBall2 2s ease-in-out infinite;
+}
+@keyframes floatBall1{0%,100%{transform:rotate(20deg) translateY(0)}50%{transform:rotate(20deg) translateY(-14px)}}
+@keyframes floatBall2{0%,100%{transform:rotate(-18deg) translateY(0)}50%{transform:rotate(-18deg) translateY(-12px)}}
+.home-hd-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1;}
+.home-greeting{font-size:12px;font-weight:500;opacity:0.7;margin-bottom:2px;}
+.home-name{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;}
+.home-sport{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.13);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;margin-top:6px;letter-spacing:0.04em;}
+.initials-btn{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.18);border:2px solid rgba(255,255,255,0.5);font-size:14px;font-weight:700;color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.18s;flex-shrink:0;letter-spacing:0.5px;}
+
+/* Animation 2: Stats strip — chips pop in + numbers count up */
+.stats-strip{display:flex;gap:8px;padding:0 16px;margin-top:-22px;margin-bottom:4px;position:relative;z-index:10;}
+.stat-chip{flex:1;background:white;border-radius:var(--r-sm);padding:12px 4px;text-align:center;box-shadow:var(--sh-md);opacity:0;transform:translateY(10px);transition:opacity 0.4s ease,transform 0.5s cubic-bezier(0.34,1.4,0.64,1);}
+.stat-val{font-size:17px;font-weight:800;color:var(--g700);line-height:1;}
+.stat-lbl{font-size:8px;font-weight:600;color:var(--text-lt);margin-top:3px;text-transform:uppercase;letter-spacing:0.03em;}
+
+/* Pep Talk card */
+.pep-card{margin:0 16px 4px;background:linear-gradient(135deg,var(--g900),var(--g800));border-radius:var(--r-md);padding:18px 18px 16px;color:white;position:relative;overflow:hidden;}
+.pep-card::before{content:'💬';position:absolute;right:-6px;top:-6px;font-size:66px;opacity:0.10;transform:rotate(8deg);}
+.pep-eyebrow{font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--g600);margin-bottom:5px;}
+.pep-headline{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:7px;}
+.pep-preview{font-size:12px;font-weight:500;opacity:0.8;line-height:1.55;margin-bottom:14px;}
+.pep-actions{display:flex;gap:8px;}
+.pep-btn{flex:1;padding:9px 8px;border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;cursor:pointer;text-align:center;transition:all 0.18s;border:none;}
+.pep-btn.primary{background:white;color:var(--g900);}
+.pep-btn:active{transform:scale(0.96);}
+.pep-usage{font-size:9px;color:rgba(255,255,255,0.45);margin-top:9px;font-weight:500;}
+
+/* Coach lesson notes */
+.lesson-note-card{margin:0 16px 4px;background:white;border-radius:var(--r-md);box-shadow:var(--sh-sm);padding:14px 16px;border-left:5px solid var(--blue);cursor:pointer;}
+.ln-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.ln-coach{font-size:13px;font-weight:700;color:var(--text);}
+.ln-date{font-size:10px;color:var(--text-lt);font-weight:500;}
+.ln-tip{display:flex;gap:8px;font-size:12px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:4px;}
+.ln-tip:last-child{margin-bottom:0;}
+.ln-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:5px;}
+
+/* Watch & Learn */
+.watch-strip{display:flex;gap:10px;padding:0 16px 4px;overflow-x:auto;}
+.watch-strip::-webkit-scrollbar{display:none;}
+.watch-chip{flex-shrink:0;width:158px;background:white;border-radius:var(--r-md);padding:0;box-shadow:var(--sh-sm);cursor:pointer;overflow:hidden;transition:transform 0.18s;}
+.watch-chip:active{transform:scale(0.96);}
+.watch-thumb{height:80px;display:flex;align-items:center;justify-content:center;font-size:32px;position:relative;}
+.watch-play{position:absolute;width:28px;height:28px;background:rgba(0,0,0,0.55);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:white;}
+.watch-body{padding:10px 11px;}
+.watch-type{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-lt);margin-bottom:3px;}
+.watch-title{font-size:11px;font-weight:700;color:var(--text);line-height:1.35;margin-bottom:3px;}
+.watch-src{font-size:10px;color:var(--text-lt);font-weight:500;}
+
+/* Quick actions */
+.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 16px;margin-bottom:4px;}
+.qa-btn{background:white;border-radius:var(--r-sm);padding:13px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:var(--sh-sm);border:none;transition:all 0.18s;}
+.qa-btn:active{transform:scale(0.96);}
+.qa-ico{font-size:22px;}
+.qa-txt{font-size:12px;font-weight:700;color:var(--text);line-height:1.3;}
+
+/* JOURNAL */
+.sort-bar{display:flex;align-items:center;justify-content:flex-end;padding:6px 18px 2px;gap:5px;font-size:10px;color:var(--text-lt);font-weight:600;}
+.scheduled-bar{margin:10px 16px 4px;background:linear-gradient(135deg,var(--gold-bg),#fff3cd);border:1px solid #f0d85a;border-radius:var(--r-md);padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;}
+.sb-ico{font-size:26px;flex-shrink:0;}
+.sb-eyebrow{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#9a6000;margin-bottom:3px;}
+.sb-title{font-size:13px;font-weight:700;color:var(--text);}
+.sb-sub{font-size:11px;color:var(--text-lt);font-weight:500;}
+.sb-arrow{margin-left:auto;color:#9a6000;font-size:18px;font-weight:700;}
+.j-entry{background:white;border-radius:var(--r-md);box-shadow:var(--sh-sm);margin:0 16px 9px;padding:13px 15px;cursor:pointer;border-left:5px solid var(--g700);transition:all 0.18s;}
+.j-entry.m{border-color:var(--orange);}
+.j-entry.l{border-color:var(--blue);}
+.j-entry:active{transform:scale(0.99);}
+.je-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;}
+.je-date{font-size:10px;color:var(--text-lt);font-weight:500;}
+.je-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.je-meta{font-size:11px;color:var(--text-lt);font-weight:500;line-height:1.4;}
+.je-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:8px;}
+.je-score{font-size:12px;font-weight:700;color:var(--g700);}
+.je-score.l{color:var(--orange);}
+
+/* SCOUT */
+.search-bar{margin:10px 16px 0;background:white;border:1.5px solid var(--divider);border-radius:var(--r-sm);padding:9px 13px;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-lt);font-weight:500;}
+.opp-card{background:white;border-radius:var(--r-md);box-shadow:var(--sh-sm);margin:0 16px 9px;padding:14px 15px;cursor:pointer;}
+.opp-hd{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.opp-avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:white;flex-shrink:0;}
+.opp-name{font-size:14px;font-weight:700;color:var(--text);}
+.opp-sub{font-size:11px;color:var(--text-lt);font-weight:500;}
+.opp-record{font-size:12px;font-weight:700;margin-left:auto;}
+.opp-record.win{color:var(--g700);}
+.opp-record.loss{color:var(--orange);}
+/* #5: hand indicator row */
+.opp-hand-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.opp-hand-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--surface);border:1.5px solid var(--divider);color:var(--text-lt);display:flex;align-items:center;gap:4px;}
+.opp-strategy{background:var(--surface);border-radius:var(--r-sm);padding:10px 12px;margin-top:10px;}
+.opp-strat-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--g700);margin-bottom:3px;}
+.opp-strat-txt{font-size:11px;font-weight:500;color:var(--text);line-height:1.5;}
+
+/* GOALS */
+.goal-card{background:white;border-radius:var(--r-md);box-shadow:var(--sh-sm);margin:0 16px 9px;padding:14px 15px;cursor:pointer;}
+.gc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.gc-title{font-size:14px;font-weight:700;color:var(--text);}
+.gc-desc{font-size:11px;color:var(--text-lt);font-weight:500;margin-bottom:10px;line-height:1.45;}
+.gc-pct{font-size:10px;font-weight:700;color:var(--g700);text-align:right;margin-top:4px;}
+.challenge-card{background:var(--orange-bg);border:1px solid #f5ddc8;border-radius:var(--r-md);margin:0 16px 9px;padding:13px 14px;cursor:pointer;}
+.cc-title{font-size:13px;font-weight:700;color:var(--orange);margin-bottom:3px;}
+.cc-desc{font-size:11px;color:var(--text-lt);font-weight:500;line-height:1.4;}
+.cc-ai{margin-top:9px;background:white;border-radius:var(--r-sm);padding:9px 11px;font-size:11px;font-weight:600;color:var(--orange);line-height:1.45;}
+
+/* GEAR */
+.gear-card{background:white;border-radius:var(--r-md);box-shadow:var(--sh-sm);margin:0 16px 9px;padding:14px 15px;display:flex;gap:13px;align-items:flex-start;}
+.gear-ico-wrap{width:44px;height:44px;border-radius:12px;background:var(--g100);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:26px;}
+.gear-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.gear-sub{font-size:11px;color:var(--text-lt);font-weight:500;margin-bottom:8px;}
+.gear-specs{display:flex;flex-wrap:wrap;gap:5px;}
+.spec{background:var(--surface);border-radius:var(--r-xs);padding:3px 8px;font-size:10px;font-weight:600;color:var(--text-lt);}
+.spec.hi{background:var(--g100);color:var(--g700);}
+.spec.main{background:var(--gold-bg);color:#9a6000;}
+.shoe-card{background:white;border-radius:var(--r-md);box-shadow:var(--sh-sm);margin:0 16px 9px;padding:14px 15px;display:flex;gap:13px;align-items:flex-start;}
+.shoe-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.shoe-name{font-size:14px;font-weight:700;color:var(--text);}
+.shoe-surface{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--orange-bg);color:var(--orange);text-transform:uppercase;}
+.shoe-detail{font-size:11px;color:var(--text-lt);font-weight:500;line-height:1.5;}
+.acc-card{background:white;border-radius:var(--r-md);box-shadow:var(--sh-sm);margin:0 16px 9px;padding:14px 15px;display:flex;gap:13px;align-items:flex-start;}
+
+/* MODAL / SHEET */
+.overlay{display:none;position:absolute;inset:0;background:rgba(0,0,0,0.52);z-index:200;flex-direction:column;justify-content:flex-end;}
+.overlay.open{display:flex;}
+.sheet{background:white;border-radius:24px 24px 0 0;padding:0 20px 24px;max-height:88%;overflow-y:auto;animation:slideUp 0.28s ease;-webkit-overflow-scrolling:touch;}
+/* Sticky header inside sheet so title never scrolls away */
+.sheet-hd{position:sticky;top:0;background:white;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:14px 20px 12px;margin:0 -20px 14px;border-bottom:1px solid var(--divider);}
+.sheet::-webkit-scrollbar{display:none;}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:40px;height:4px;background:var(--divider);border-radius:2px;margin:12px auto 0;}
+
+.sheet-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);}
+.sheet-close{width:28px;height:28px;border-radius:50%;background:var(--surface);border:none;color:var(--text-lt);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* Animation 3: Cinematic Pep Talk Sheet */
+.pep-overlay-bg{background:rgba(0,0,0,0.78)!important;}
+/* Animated header gradient — matches Home */
+.pep-sheet-hd{
+  background:linear-gradient(135deg,#0d3320,#4a1070,#2a7a4b,#1b0a40,#1b5230,#6a1b9a,#0d3320);
+  background-size:400% 400%;
+  animation:pepGrad 5s ease infinite;
+  margin:0 -20px 0;padding:22px 22px 18px;border-radius:24px 24px 0 0;color:white;position:relative;overflow:hidden;
+}
+@keyframes pepGrad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+/* Pom-poms */
+.pom-left,.pom-right{position:absolute;font-size:32px;bottom:10px;opacity:0.55;pointer-events:none;}
+.pom-left{left:6px;animation:pomLeft 0.4s ease-in-out infinite alternate;}
+.pom-right{right:6px;animation:pomRight 0.4s ease-in-out infinite alternate;}
+@keyframes pomLeft{
+  from{transform:rotate(-30deg) translateY(0)}
+  to{transform:rotate(15deg) translateY(-8px)}
+}
+@keyframes pomRight{
+  from{transform:rotate(30deg) translateY(0)}
+  to{transform:rotate(-15deg) translateY(-8px)}
+}
+
+/* Fireworks */
+.fw{position:absolute;pointer-events:none;font-size:20px;opacity:0;}
+.fw1{top:8px;left:18%;animation:fwPop 2.2s 0.3s ease-in-out infinite;}
+.fw2{top:4px;right:22%;animation:fwPop 2.2s 0.9s ease-in-out infinite;}
+.fw3{top:14px;left:52%;animation:fwPop 2.2s 1.5s ease-in-out infinite;}
+.fw4{bottom:22px;left:38%;animation:fwPop 2.2s 0.6s ease-in-out infinite;}
+@keyframes fwPop{
+  0%{opacity:0;transform:scale(0.3) translateY(6px)}
+  18%{opacity:1;transform:scale(1.3) translateY(-4px)}
+  36%{opacity:0.7;transform:scale(1) translateY(0)}
+  55%{opacity:0;transform:scale(0.5)}
+  100%{opacity:0}
+}
+
+/* Header text staggered fade-in */
+.psh-eyebrow{font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(200,160,255,0.9);margin-bottom:5px;opacity:0;animation:pepFade 0.4s 0.1s forwards;position:relative;z-index:1;}
+.psh-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:3px;opacity:0;animation:pepSlide 0.55s 0.25s cubic-bezier(0.34,1.4,0.64,1) forwards;position:relative;z-index:1;}
+.psh-sub{font-size:11px;font-weight:500;margin-bottom:14px;opacity:0;animation:pepFade 0.4s 0.42s forwards;position:relative;z-index:1;}
+@keyframes pepFade{from{opacity:0}to{opacity:0.65}}
+@keyframes pepSlide{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+/* Now Playing bar slides up */
+.now-playing{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r-sm);padding:10px 12px;opacity:0;animation:pepSlide 0.5s 0.58s cubic-bezier(0.34,1.3,0.64,1) forwards;position:relative;z-index:1;}
+/* EQ bars */
+.np-eq{display:flex;align-items:flex-end;gap:2px;height:14px;margin-right:2px;}
+.eq-bar{width:3px;border-radius:2px;background:var(--g600);}
+.eq-bar:nth-child(1){animation:eq 0.7s 0.00s ease-in-out infinite alternate;}
+.eq-bar:nth-child(2){animation:eq 0.7s 0.18s ease-in-out infinite alternate;}
+.eq-bar:nth-child(3){animation:eq 0.7s 0.32s ease-in-out infinite alternate;}
+.eq-bar:nth-child(4){animation:eq 0.7s 0.10s ease-in-out infinite alternate;}
+@keyframes eq{from{height:3px}to{height:14px}}
+.np-eq.paused .eq-bar{animation-play-state:paused;}
+/* Pep content blocks — staggered slide-up */
+.pep-blocks-wrap{padding-top:14px;}
+.pep-block{background:var(--surface);border-radius:var(--r-sm);padding:13px 14px;margin-bottom:9px;border-left:4px solid var(--g700);opacity:0;transform:translateY(16px);transition:opacity 0.45s ease,transform 0.5s cubic-bezier(0.34,1.3,0.64,1);}
+.pep-block.pv{opacity:1;transform:translateY(0);}
+.pb-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--g700);margin-bottom:5px;}
+.pb-txt{font-size:13px;font-weight:600;color:var(--text);line-height:1.6;}
+.pep-limit{font-size:10px;color:var(--text-lt);text-align:center;margin-top:10px;font-weight:500;}
+/* CTA with shimmer */
+.sheet-cta{width:100%;margin-top:12px;padding:14px;background:linear-gradient(135deg,var(--g700),#6a1b9a);color:white;border:none;border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:0.01em;position:relative;overflow:hidden;}
+.sheet-cta::after{content:'';position:absolute;top:0;left:-100%;width:55%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.22),transparent);animation:shimmer 2.6s 1.2s ease-in-out infinite;}
+@keyframes shimmer{from{left:-60%}to{left:110%}}
+
+/* Scout detail sheet */
+.scout-block{background:var(--surface);border-radius:var(--r-sm);padding:12px 14px;margin-bottom:9px;display:flex;gap:12px;align-items:flex-start;}
+.sb-icon-lrg{font-size:22px;flex-shrink:0;}
+.sb-blabel{font-size:11px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.sb-btext{font-size:11px;font-weight:500;color:var(--text-lt);line-height:1.5;}
+
+/* Add opponent tag selector */
+.tag-group-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin:14px 0 7px;}
+.tag-group-lbl.str{color:var(--g700);}  /* GREEN for strengths */
+.tag-group-lbl.wk {color:var(--red);}   /* RED for weaknesses */
+.tag-group-lbl.neu{color:var(--text-lt);}
+.tag-select-grid{display:flex;flex-wrap:wrap;gap:7px;}
+.tag-sel{padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid var(--divider);background:var(--surface);color:var(--text-lt);transition:all 0.15s;}
+.tag-sel.str.on{background:var(--g100);color:var(--g700);border-color:var(--g700);}   /* green when selected */
+.tag-sel.wk.on {background:var(--red-bg);color:var(--red);border-color:var(--red);}  /* red when selected */
+.tag-sel.neu.on{background:var(--surface);color:var(--text);border-color:var(--text-lt);}
+.notes-area{width:100%;margin-top:12px;background:var(--surface);border:1.5px solid var(--divider);border-radius:var(--r-sm);padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--text);resize:none;height:72px;line-height:1.5;}
+.notes-area:focus{outline:none;border-color:var(--g700);background:white;}
+
+/* Log form */
+.lf-tabs{display:flex;border-bottom:1px solid var(--divider);margin-bottom:14px;}
+.lf-tab{flex:1;padding:10px 4px;text-align:center;font-size:12px;font-weight:700;color:var(--text-lt);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.18s;}
+.lf-tab.on{color:var(--g700);border-color:var(--g700);}
+.lf-pane{display:none;}
+.lf-pane.on{display:block;}
+.lf-field{margin-bottom:12px;}
+.lf-label{font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-lt);margin-bottom:5px;display:block;}
+.lf-input{width:100%;background:var(--surface);border:1.5px solid var(--divider);border-radius:var(--r-sm);padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--text);transition:border-color 0.18s;}
+.lf-input:focus{outline:none;border-color:var(--g700);background:white;}
+.lf-input::placeholder{color:var(--text-lt);}
+.lf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.lf-pills{display:flex;gap:7px;flex-wrap:wrap;}
+.lf-pill{padding:7px 13px;border-radius:20px;font-size:11px;font-weight:700;background:var(--surface);border:1.5px solid var(--divider);color:var(--text-lt);cursor:pointer;transition:all 0.15s;}
+.lf-pill.on{background:var(--g100);border-color:var(--g700);color:var(--g700);}
+.lf-star-row{display:flex;gap:6px;}
+.lf-star{font-size:24px;cursor:pointer;filter:grayscale(1) opacity(0.3);}
+.lf-star.on{filter:none;}
+.score-inputs{display:flex;align-items:center;gap:8px;}
+.score-box{flex:1;background:var(--surface);border:1.5px solid var(--divider);border-radius:var(--r-sm);padding:9px 6px;text-align:center;font-size:15px;font-weight:700;color:var(--text);}
+.score-box.me{border-color:var(--g700);background:var(--g100);color:var(--g700);}
+.score-vs{font-size:11px;color:var(--text-lt);font-weight:700;flex-shrink:0;}
+.result-pills{display:flex;gap:8px;margin-top:8px;}
+.result-pill{flex:1;padding:8px;border-radius:var(--r-sm);text-align:center;font-size:11px;font-weight:700;border:1.5px solid var(--divider);background:var(--surface);color:var(--text-lt);cursor:pointer;}
+.result-pill.win{background:var(--g100);border-color:var(--g700);color:var(--g700);}
+.result-pill.loss{background:var(--orange-bg);border-color:var(--orange);color:var(--orange);}
+.goal-check-list{display:flex;flex-direction:column;gap:7px;}
+.goal-check{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border-radius:var(--r-sm);border:1.5px solid transparent;cursor:pointer;}
+.goal-check.on{background:var(--g100);border-color:rgba(42,122,75,0.2);}
+.check-circle{width:20px;height:20px;border-radius:50%;border:2px solid var(--text-lt);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;}
+.check-circle.on{background:var(--g700);border-color:var(--g700);color:white;}
+.goal-check-lbl{font-size:12px;font-weight:600;color:var(--text);}
+.goal-check.on .goal-check-lbl{color:var(--g700);font-weight:700;}
+.save-btn{width:100%;margin-top:14px;padding:15px;background:linear-gradient(135deg,var(--g700),var(--g800));color:white;border:none;border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(42,122,75,0.3);transition:all 0.18s;}
+.save-btn:active{transform:scale(0.98);}
+
+/* PROFILE PANEL */
+.prof-overlay{display:none;position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:400;flex-direction:column;justify-content:flex-start;}
+.prof-overlay.open{display:flex;}
+.prof-panel{background:white;width:100%;max-height:96%;overflow-y:auto;border-radius:0 0 var(--r-xl) var(--r-xl);animation:slideDown 0.3s cubic-bezier(0.34,1.2,0.64,1) both;box-shadow:0 16px 50px rgba(0,0,0,0.25);}
+.prof-panel::-webkit-scrollbar{display:none;}
+@keyframes slideDown{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
+.pp-hd{background:linear-gradient(145deg,var(--g800),var(--g700));padding:20px 20px 24px;color:white;position:relative;text-align:center;}
+.pp-close-btn{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.15);border:none;color:white;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.pp-av-wrap{position:relative;display:inline-block;margin-bottom:10px;}
+.pp-av{width:76px;height:76px;border-radius:50%;background:rgba(255,255,255,0.18);border:3px solid rgba(255,255,255,0.65);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;margin:0 auto;color:white;}
+.pp-av-edit{position:absolute;bottom:2px;right:2px;width:22px;height:22px;background:var(--gold);border-radius:50%;font-size:10px;border:2px solid white;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.pp-name-disp{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;margin-bottom:2px;}
+.pp-meta-disp{font-size:11px;opacity:0.65;font-weight:500;}
+.pp-body{padding:18px;}
+.pp-sec{font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-lt);margin:16px 0 9px;padding-bottom:6px;border-bottom:1px solid var(--divider);}
+.pp-sec:first-child{margin-top:0;}
+.pp-field{margin-bottom:11px;}
+.pp-field label{display:block;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-lt);margin-bottom:5px;}
+.pp-input{width:100%;background:var(--surface);border:1.5px solid var(--divider);border-radius:var(--r-sm);padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--text);transition:border-color 0.18s;-webkit-appearance:none;}
+.pp-input:focus{outline:none;border-color:var(--g700);background:white;}
+.pp-input::placeholder{color:var(--text-lt);}
+.pp-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.pp-segs{display:flex;gap:5px;flex-wrap:wrap;}
+.pp-seg{flex:1;min-width:54px;padding:7px 6px;border-radius:var(--r-xs);background:var(--surface);border:1.5px solid var(--divider);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:var(--text-lt);cursor:pointer;text-align:center;transition:all 0.15s;}
+.pp-seg.on{background:var(--g100);border-color:var(--g700);color:var(--g700);font-weight:700;}
+.pp-notif-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--divider);}
+.pp-notif-row:last-child{border-bottom:none;}
+.pp-notif-lbl{font-size:13px;font-weight:700;color:var(--text);}
+.pp-notif-sub{font-size:10px;color:var(--text-lt);font-weight:500;margin-top:1px;}
+.pp-save{width:100%;margin-top:18px;margin-bottom:8px;padding:14px;background:linear-gradient(135deg,var(--g700),var(--g800));color:white;border:none;border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+
+/* Pep Talk Song row in profile */
+.song-picker-row{background:var(--g50);border:1.5px solid rgba(42,122,75,0.2);border-radius:var(--r-sm);padding:11px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;}
+.sp-art{width:32px;height:32px;border-radius:6px;background:linear-gradient(135deg,#9c27b0,#6a1b9a);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.sp-info{flex:1;}
+.sp-song{font-size:12px;font-weight:700;color:var(--text);}
+.sp-artist{font-size:10px;color:var(--text-lt);font-weight:500;}
+.sp-change{font-size:11px;font-weight:700;color:var(--g700);white-space:nowrap;}
+
+/* ── TIER 1: ONBOARDING ─────────────────────────── */
+#screen-onboarding{
+  background:linear-gradient(165deg,#0d3320 0%,#4a1070 55%,#1b5230 100%);
+}
+.ob-wrap{flex:1;display:flex;flex-direction:column;padding:28px 24px 24px;overflow-y:auto;}
+.ob-wrap::-webkit-scrollbar{display:none;}
+.ob-progress{display:flex;gap:5px;margin-bottom:28px;}
+.ob-dot{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,0.18);transition:background 0.3s;}
+.ob-dot.done{background:var(--g600);}
+.ob-dot.active{background:white;}
+.ob-step{display:none;flex-direction:column;flex:1;}
+.ob-step.active{display:flex;}
+.ob-icon{font-size:44px;margin-bottom:16px;}
+.ob-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:white;margin-bottom:8px;line-height:1.25;}
+.ob-sub{font-size:13px;color:rgba(255,255,255,0.58);font-weight:500;line-height:1.6;margin-bottom:22px;}
+.ob-field{margin-bottom:13px;}
+.ob-field label{display:block;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:5px;}
+.ob-input{width:100%;background:rgba(255,255,255,0.10);border:1.5px solid rgba(255,255,255,0.2);border-radius:var(--r-sm);padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:white;transition:border-color 0.18s;}
+.ob-input:focus{outline:none;border-color:var(--g600);background:rgba(255,255,255,0.14);}
+.ob-input::placeholder{color:rgba(255,255,255,0.3);}
+.ob-segs{display:flex;gap:8px;flex-wrap:wrap;}
+.ob-seg{flex:1;min-width:68px;padding:10px 8px;border-radius:var(--r-sm);background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.16);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:rgba(255,255,255,0.65);cursor:pointer;text-align:center;transition:all 0.15s;}
+.ob-seg.on{background:var(--g700);border-color:var(--g600);color:white;}
+.ob-select{width:100%;background:rgba(255,255,255,0.10);border:1.5px solid rgba(255,255,255,0.2);border-radius:var(--r-sm);padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:white;-webkit-appearance:none;}
+.ob-select option{background:#1b2d45;color:white;}
+.ob-notif-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+.ob-notif-row:last-of-type{border:none;}
+.ob-notif-lbl{font-size:13px;font-weight:700;color:white;}
+.ob-notif-sub{font-size:10px;color:rgba(255,255,255,0.4);font-weight:500;margin-top:2px;}
+.ob-song-row{background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.14);border-radius:var(--r-sm);padding:12px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;margin-top:8px;}
+.ob-spacer{flex:1;min-height:16px;}
+.ob-actions{display:flex;flex-direction:column;gap:9px;margin-top:16px;}
+.ob-next{width:100%;padding:15px;background:white;color:var(--g900);border:none;border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.18s;}
+.ob-next:active{transform:scale(0.97);}
+.ob-skip{font-size:12px;font-weight:600;color:rgba(255,255,255,0.4);cursor:pointer;text-align:center;text-decoration:underline;background:none;border:none;font-family:'DM Sans',sans-serif;}
+
+/* ── TIER 1: SIGN IN ────────────────────────────── */
+#screen-signin{
+  background:linear-gradient(165deg,#0d3320 0%,#4a1070 55%,#1b5230 100%);
+}
+.si-wrap{flex:1;display:flex;flex-direction:column;padding:32px 24px 28px;overflow-y:auto;}
+.si-wrap::-webkit-scrollbar{display:none;}
+.si-back{font-size:13px;font-weight:600;color:rgba(255,255,255,0.65);cursor:pointer;display:flex;align-items:center;gap:5px;margin-bottom:24px;background:none;border:none;font-family:'DM Sans',sans-serif;}
+.si-mark{font-size:36px;margin-bottom:14px;}
+.si-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:800;color:white;margin-bottom:5px;}
+.si-sub{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:28px;font-weight:500;}
+.si-field{margin-bottom:13px;}
+.si-field label{display:block;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:5px;}
+.si-input{width:100%;background:rgba(255,255,255,0.10);border:1.5px solid rgba(255,255,255,0.2);border-radius:var(--r-sm);padding:13px 14px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:white;transition:border-color 0.18s;}
+.si-input:focus{outline:none;border-color:var(--g600);}
+.si-input::placeholder{color:rgba(255,255,255,0.3);}
+.si-cta{width:100%;padding:15px;background:white;color:var(--g900);border:none;border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px;margin-bottom:10px;transition:all 0.18s;}
+.si-cta:active{transform:scale(0.98);}
+.si-forgot{text-align:center;font-size:12px;color:rgba(255,255,255,0.45);cursor:pointer;text-decoration:underline;background:none;border:none;font-family:'DM Sans',sans-serif;width:100%;margin-bottom:18px;}
+.si-divider{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.si-divider-line{flex:1;height:1px;background:rgba(255,255,255,0.14);}
+.si-divider-txt{font-size:11px;color:rgba(255,255,255,0.38);font-weight:600;}
+.si-social{width:100%;padding:13px;background:rgba(255,255,255,0.10);border:1.5px solid rgba(255,255,255,0.2);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;transition:all 0.15s;}
+.si-switch{text-align:center;font-size:12px;color:rgba(255,255,255,0.45);margin-top:18px;font-weight:500;}
+.si-switch-link{color:white;font-weight:700;cursor:pointer;text-decoration:underline;}
+
+/* ── TIER 1: EMPTY STATE ───────────────────────── */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:52px 28px;text-align:center;}
+.es-icon{font-size:54px;margin-bottom:16px;opacity:0.45;}
+.es-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.es-sub{font-size:13px;color:var(--text-lt);font-weight:500;line-height:1.6;margin-bottom:22px;max-width:260px;}
+.es-cta{padding:12px 28px;background:var(--g700);color:white;border:none;border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(42,122,75,0.3);}
+
+/* ── TIER 1: SCHEDULED MATCH SHEET ─────────────── */
+.match-detail-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--divider);}
+.match-detail-row:last-child{border-bottom:none;}
+.md-lbl{font-size:11px;font-weight:600;color:var(--text-lt);}
+.md-val{font-size:12px;font-weight:700;color:var(--text);}
+.prep-card{background:var(--blue-bg);border-radius:var(--r-sm);padding:13px 14px;margin:12px 0;}
+.prep-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--blue);margin-bottom:5px;}
+.prep-txt{font-size:12px;font-weight:600;color:var(--text);line-height:1.55;}
+.match-action-row{display:flex;gap:9px;margin-top:14px;}
+.match-action-row .save-btn{margin-top:0;}
+.match-sec-btn{padding:12px 14px;background:var(--surface);border:1.5px solid var(--divider);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--text-lt);cursor:pointer;white-space:nowrap;}
+
+/* ── TIER 1: ADD GOAL SHEET ─────────────────────── */
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.cat-btn{padding:11px 10px;border-radius:var(--r-sm);border:1.5px solid var(--divider);background:var(--surface);cursor:pointer;display:flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;transition:all 0.18s;}
+.cat-btn.on{border-color:var(--g700);background:var(--g100);}
+.cat-ico{font-size:18px;}
+.cat-lbl{font-size:12px;font-weight:700;color:var(--text-lt);}
+.cat-btn.on .cat-lbl{color:var(--g700);}
+.prog-slider{width:100%;accent-color:var(--g700);margin-top:4px;}
+
+/* ── TIER 1: ADD GEAR SHEET ─────────────────────── */
+.gear-type-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:16px;}
+.gear-type-btn{padding:14px 6px;border-radius:var(--r-sm);border:1.5px solid var(--divider);background:var(--surface);cursor:pointer;text-align:center;transition:all 0.18s;font-family:'DM Sans',sans-serif;}
+.gear-type-btn.on{border-color:var(--g700);background:var(--g100);}
+.gt-ico{font-size:24px;margin-bottom:5px;}
+.gt-lbl{font-size:11px;font-weight:700;color:var(--text-lt);}
+.gear-type-btn.on .gt-lbl{color:var(--g700);}
+.gear-form-section{display:none;}
+.gear-form-section.active{display:block;}
+
+/* ── TIER 1: DELETE CONFIRM SHEET ───────────────── */
+.del-icon{font-size:44px;text-align:center;margin:14px 0 8px;}
+.del-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--text);text-align:center;margin-bottom:6px;}
+.del-sub{font-size:12px;color:var(--text-lt);text-align:center;font-weight:500;line-height:1.55;margin-bottom:20px;}
+.del-confirm-btn{width:100%;padding:14px;background:var(--red);color:white;border:none;border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:9px;}
+.del-cancel-btn{width:100%;padding:14px;background:var(--surface);color:var(--text);border:1.5px solid var(--divider);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+
+/* ── SHARED FORM HELPERS ────────────────────────── */
+.save-btn{width:100%;margin-top:14px;padding:15px;background:linear-gradient(135deg,var(--g700),var(--g800));color:white;border:none;border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(42,122,75,0.25);transition:all 0.18s;}
+.save-btn:active{transform:scale(0.98);}
+.lf-field{margin-bottom:12px;}
+.lf-label{font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-lt);margin-bottom:5px;display:block;}
+.lf-input{width:100%;background:var(--surface);border:1.5px solid var(--divider);border-radius:var(--r-sm);padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--text);transition:border-color 0.18s;}
+.lf-input:focus{outline:none;border-color:var(--g700);background:white;}
+.lf-input::placeholder{color:var(--text-lt);}
+.lf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.lf-pills{display:flex;gap:7px;flex-wrap:wrap;}
+.lf-pill{padding:7px 13px;border-radius:20px;font-size:11px;font-weight:700;background:var(--surface);border:1.5px solid var(--divider);color:var(--text-lt);cursor:pointer;transition:all 0.15s;}
+.lf-pill.on{background:var(--g100);border-color:var(--g700);color:var(--g700);}
+.lf-tabs{display:flex;border-bottom:1px solid var(--divider);margin-bottom:14px;}
+.lf-tab{flex:1;padding:10px 4px;text-align:center;font-size:12px;font-weight:700;color:var(--text-lt);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.18s;}
+.lf-tab.on{color:var(--g700);border-color:var(--g700);}
+.lf-pane{display:none;}
+.lf-pane.on{display:block;}
+.lf-star-row{display:flex;gap:6px;}
+.lf-star{font-size:24px;cursor:pointer;filter:grayscale(1) opacity(0.3);transition:filter 0.15s;}
+.lf-star.on{filter:none;}
+.goal-check-list{display:flex;flex-direction:column;gap:6px;}
+.goal-check{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border-radius:var(--r-sm);border:1.5px solid transparent;cursor:pointer;transition:all 0.15s;}
+.goal-check.on{background:var(--g100);border-color:rgba(42,122,75,0.2);}
+.check-circle{width:20px;height:20px;border-radius:50%;border:2px solid var(--text-lt);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;transition:all 0.15s;}
+.check-circle.on{background:var(--g700);border-color:var(--g700);color:white;}
+.goal-check-lbl{font-size:12px;font-weight:600;color:var(--text);}
+.goal-check.on .goal-check-lbl{color:var(--g700);font-weight:700;}
+.score-inputs{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.score-box{flex:1;background:var(--surface);border:1.5px solid var(--divider);border-radius:var(--r-sm);padding:9px 6px;text-align:center;font-size:15px;font-weight:700;color:var(--text);}
+.score-box.me{border-color:var(--g700);background:var(--g100);color:var(--g700);}
+.score-vs{font-size:11px;color:var(--text-lt);font-weight:700;flex-shrink:0;}
+.result-pills{display:flex;gap:8px;}
+.result-pill{flex:1;padding:8px;border-radius:var(--r-sm);text-align:center;font-size:11px;font-weight:700;border:1.5px solid var(--divider);background:var(--surface);color:var(--text-lt);cursor:pointer;transition:all 0.15s;}
+.result-pill.win{background:var(--g100);border-color:var(--g700);color:var(--g700);}
+.result-pill.loss{background:var(--orange-bg);border-color:var(--orange);color:var(--orange);}
+</style>
+</head>
+<body>
+
+<div class="meta-label">RallyMind · Interactive Prototype v5</div>
+
+<div class="phone">
+  <div class="status-bar">
+    <span class="sb-time" id="liveTime">9:41</span>
+    <span class="sb-brand">RALLYMIND</span>
+    <div class="sb-icons"><span>●●●</span><span>WiFi</span><span>🔋</span></div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <!-- ══════════════════════════════════════════════════
+       SPLASH
+       ══════════════════════════════════════════════════ -->
+  <div class="screen active" id="screen-splash">
+    <div class="splash-wrap">
+      <div class="splash-mark">🎾</div>
+      <div class="splash-name">RallyMind</div>
+      <div class="splash-tagline">Step On The Court Ready</div>
+      <div class="splash-sport-row">
+        <div class="splash-sport on" onclick="selectSport(this)">🎾 Tennis</div>
+        <div class="splash-sport" onclick="showToast('🏓 Pickleball coming soon!')">🏓 Pickleball</div>
+      </div>
+      <button class="splash-cta" onclick="navTo('onboarding')">Get Started — It's Free</button>
+      <button class="splash-signin" onclick="navTo('signin')">Already have an account? Sign in</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       HOME  — fixes: #1 stats visible, #3 Quick Actions above Watch & Learn,
+                       #4 lesson card → Journal, #8 song auto-play on pep talk
+       ══════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-home">
+    <div class="scroll">
+      <!-- Header -->
+      <div class="home-hd">
+        <div class="home-hd-top">
+          <div>
+            <div class="home-greeting">Good morning,</div>
+            <div class="home-name" id="homeName">Player</div>
+            <div class="home-sport">🎾 Tennis · 4.0 USTA</div>
+          </div>
+          <div class="initials-btn" id="initialsBtn" onclick="openProfile()">SR</div>
+        </div>
+      </div>
+
+      <!-- Stats strip — animated chips + counter -->
+      <div class="stats-strip" id="statsStrip">
+        <div class="stat-chip" style="transition-delay:0.05s"><div class="stat-val" data-target="24">0</div><div class="stat-lbl">Sessions</div></div>
+        <div class="stat-chip" style="transition-delay:0.15s"><div class="stat-val" id="wlStat">0–0</div><div class="stat-lbl">W / L</div></div>
+        <div class="stat-chip" style="transition-delay:0.25s"><div class="stat-val" data-target="38" data-suffix="h">0h</div><div class="stat-lbl">Court Time</div></div>
+        <div class="stat-chip" style="transition-delay:0.35s"><div class="stat-val" data-target="3">0</div><div class="stat-lbl">Goals</div></div>
+      </div>
+
+      <!-- Pep Talk -->
+      <div class="sec-hd">Today's Pep Talk</div>
+      <div class="pep-card">
+        <div class="pep-eyebrow">🤖 AI · Personalized for your game</div>
+        <div class="pep-headline">You're ready for this.</div>
+        <div class="pep-preview">Your backhand has been your weapon lately — roll that wrist, breathe out at contact, and trust everything Coach Danny worked on with you.</div>
+        <div class="pep-actions">
+          <button class="pep-btn primary" onclick="openPepModal()">💬 Get My Pep Talk</button>
+        </div>
+        <div class="pep-usage">2 of 3 free pep talks used this week · Resets Sunday</div>
+      </div>
+
+      <!-- Latest Coach Lesson — #4 taps → Journal -->
+      <div class="sec-hd">Latest Coach Lesson <span class="sec-hd-action" onclick="navTo('journal')">See in Journal →</span></div>
+      <div class="lesson-note-card" onclick="navTo('journal')">
+        <div class="ln-top">
+          <div class="ln-coach">Coach Danny</div>
+          <div class="ln-date">Feb 18, 2026</div>
+        </div>
+        <div class="ln-tip"><div class="ln-dot"></div>Roll right wrist through contact on backhand for topspin</div>
+        <div class="ln-tip"><div class="ln-dot"></div>Finish strokes fully across body — don't stop the swing at contact</div>
+        <div class="ln-tip"><div class="ln-dot"></div>Exhale on every shot — releases tension and improves timing</div>
+      </div>
+
+      <!-- #3 Quick Actions — moved ABOVE Watch & Learn -->
+      <div class="sec-hd">Quick Actions</div>
+      <div class="qa-grid">
+        <button class="qa-btn" onclick="openLogSheet()"><div class="qa-ico">📓</div><div class="qa-txt">Log Journal Session</div></button>
+        <button class="qa-btn" onclick="navTo('scout')"><div class="qa-ico">🕵️</div><div class="qa-txt">Scout Opponent</div></button>
+        <button class="qa-btn" onclick="navTo('goals')"><div class="qa-ico">🎯</div><div class="qa-txt">My Goals</div></button>
+        <button class="qa-btn" onclick="navTo('gear')"><div class="qa-ico">🎾</div><div class="qa-txt">My Gear</div></button>
+      </div>
+
+      <!-- Watch & Learn — now BELOW Quick Actions -->
+      <div class="sec-hd">Watch &amp; Learn <span class="sec-hd-action" onclick="showToast('📺 Full library coming soon!')">See all →</span></div>
+      <div class="watch-strip">
+        <div class="watch-chip" onclick="showToast('▶️ Opening: Backhand Topspin Masterclass')">
+          <div class="watch-thumb" style="background:linear-gradient(135deg,#1b5230,#3daf6e);">🎾<div class="watch-play">▶</div></div>
+          <div class="watch-body"><div class="watch-type">🎬 Video</div><div class="watch-title">Backhand Topspin Masterclass</div><div class="watch-src">YouTube · 8 min</div></div>
+        </div>
+        <div class="watch-chip" onclick="showToast('📖 Opening: The Mental Game of Doubles')">
+          <div class="watch-thumb" style="background:linear-gradient(135deg,#283593,#5c6bc0);">🧠<div class="watch-play">▶</div></div>
+          <div class="watch-body"><div class="watch-type">📖 Article</div><div class="watch-title">The Mental Game of Doubles</div><div class="watch-src">Tennis.com · 5 min read</div></div>
+        </div>
+        <div class="watch-chip" onclick="showToast('▶️ Opening: Second Serve Secrets')">
+          <div class="watch-thumb" style="background:linear-gradient(135deg,#b71c1c,#e57373);">💥<div class="watch-play">▶</div></div>
+          <div class="watch-body"><div class="watch-type">🎬 Video</div><div class="watch-title">Second Serve Secrets</div><div class="watch-src">USTA · 11 min</div></div>
+        </div>
+        <div class="watch-chip" onclick="showToast('📖 Opening: When to Poach in Doubles')">
+          <div class="watch-thumb" style="background:linear-gradient(135deg,#e65100,#ff8a65);">🏃<div class="watch-play">▶</div></div>
+          <div class="watch-body"><div class="watch-type">📖 Article</div><div class="watch-title">When to Poach in Doubles</div><div class="watch-src">TennisGate · 4 min read</div></div>
+        </div>
+      </div>
+      <div style="height:18px;"></div>
+    </div>
+    <nav class="nav">
+      <button class="nav-btn active" onclick="navTo('home')"><div class="nav-ico">🏠</div><div class="nav-lbl">Home</div></button>
+      <button class="nav-btn" onclick="navTo('journal')"><div class="nav-ico">📓</div><div class="nav-lbl">Journal</div></button>
+      <button class="nav-btn" onclick="navTo('scout')"><div class="nav-ico">🕵️</div><div class="nav-lbl">Scout</div></button>
+      <button class="nav-btn" onclick="navTo('goals')"><div class="nav-ico">🎯</div><div class="nav-lbl">Goals</div></button>
+      <button class="nav-btn" onclick="navTo('gear')"><div class="nav-ico">🎾</div><div class="nav-lbl">Gear</div></button>
+    </nav>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       JOURNAL
+       ══════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-journal">
+    <div class="page-hd">
+      <div class="page-hd-row">
+        <div><div class="page-hd-title">Journal</div><div class="page-hd-sub">Matches · Lessons · Practices</div></div>
+        <button class="fab" onclick="openLogSheet()">+</button>
+      </div>
+    </div>
+    <div class="pills">
+      <div class="pill on" onclick="filterJournal('all',this)">All</div>
+      <div class="pill" onclick="filterJournal('match',this)">Match</div>
+      <div class="pill" onclick="filterJournal('lesson',this)">Lesson</div>
+      <div class="pill" onclick="filterJournal('practice',this)">Practice</div>
+      <div class="pill" onclick="filterJournal('scheduled',this)">Scheduled</div>
+    </div>
+    <div class="sort-bar">
+      <svg width="10" height="10" viewBox="0 0 10 10"><path d="M5 2L8 6H2Z" fill="currentColor"/></svg>
+      Sorted by date · most recent first
+    </div>
+    <div class="scroll" id="journalScroll">
+      <div class="journal-item" data-type="scheduled">
+        <div class="scheduled-bar" onclick="openScheduledDetail()">
+          <div class="sb-ico">📅</div>
+          <div>
+            <div class="sb-eyebrow">Scheduled · Mar 5, 2026</div>
+            <div class="sb-title">vs. Lisa M. &amp; Dana R.</div>
+            <div class="sb-sub">Bayshore TC · Doubles · Hard Court · 2:00 PM</div>
+          </div>
+          <div class="sb-arrow">›</div>
+        </div>
+      </div>
+      <div class="journal-item" data-type="match">
+        <div class="j-entry m" onclick="openScoutModal('karen')">
+          <div class="je-top"><span class="tag tag-match">Match</span><span class="je-date">Feb 22, 2026</span></div>
+          <div class="je-title">vs. Karen T. &amp; Sarah M.</div>
+          <div class="je-meta">Bayshore TC · Doubles · Hard Court · League · 1h 45m</div>
+          <div class="je-bottom"><div class="stars">⭐⭐⭐⭐⭐</div><div class="je-score">Win 6–4, 7–5</div></div>
+        </div>
+      </div>
+      <div class="journal-item" data-type="lesson">
+        <div class="j-entry l" onclick="showToast('📋 Lesson detail — tap to edit coming soon!')">
+          <div class="je-top"><span class="tag tag-lesson">Lesson</span><span class="je-date">Feb 18, 2026</span></div>
+          <div class="je-title">Lesson with Coach Danny</div>
+          <div class="je-meta">1h 30m · Backhand approach, return of serve, serve toss</div>
+          <div class="je-bottom"><div class="stars">⭐⭐⭐⭐⭐</div><div class="je-score" style="color:var(--blue);">3 tips logged</div></div>
+        </div>
+      </div>
+      <div class="journal-item" data-type="practice">
+        <div class="j-entry" onclick="showToast('📋 Practice detail — tap to edit coming soon!')">
+          <div class="je-top"><span class="tag tag-practice">Practice</span><span class="je-date">Feb 15, 2026</span></div>
+          <div class="je-title">Baseline Drills · Singles</div>
+          <div class="je-meta">2h · Bayshore TC · Hard Court</div>
+          <div class="je-bottom"><div class="stars">⭐⭐⭐⭐</div><div class="je-score">Session logged</div></div>
+        </div>
+      </div>
+      <div class="journal-item" data-type="match">
+        <div class="j-entry m" onclick="showToast('📋 Entry detail — tap to edit coming soon!')">
+          <div class="je-top"><span class="tag tag-match">Match</span><span class="je-date">Feb 10, 2026</span></div>
+          <div class="je-title">vs. Michelle K. &amp; Tanya R.</div>
+          <div class="je-meta">Bayshore TC · Doubles · Hard Court · League · 1h 55m</div>
+          <div class="je-bottom"><div class="stars">⭐⭐⭐</div><div class="je-score l">Loss 4–6, 5–7</div></div>
+        </div>
+      </div>
+      <div class="dash-add" onclick="openLogSheet()">+ Log New Entry</div>
+      <div style="height:12px;"></div>
+    </div>
+    <nav class="nav">
+      <button class="nav-btn" onclick="navTo('home')"><div class="nav-ico">🏠</div><div class="nav-lbl">Home</div></button>
+      <button class="nav-btn active" onclick="navTo('journal')"><div class="nav-ico">📓</div><div class="nav-lbl">Journal</div></button>
+      <button class="nav-btn" onclick="navTo('scout')"><div class="nav-ico">🕵️</div><div class="nav-lbl">Scout</div></button>
+      <button class="nav-btn" onclick="navTo('goals')"><div class="nav-ico">🎯</div><div class="nav-lbl">Goals</div></button>
+      <button class="nav-btn" onclick="navTo('gear')"><div class="nav-ico">🎾</div><div class="nav-lbl">Gear</div></button>
+    </nav>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       SCOUT — #5 hand icons positioned, #6/#7 colors swapped,
+                #10 auto-link banner removed
+       ══════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-scout">
+    <div class="page-hd">
+      <div class="page-hd-row">
+        <div><div class="page-hd-title">Scout</div><div class="page-hd-sub">Know your opponents</div></div>
+        <button class="fab" onclick="openAddOpponent()">+</button>
+      </div>
+    </div>
+    <div class="search-bar">🔍 &nbsp;Search opponents…</div>
+    <div class="pills">
+      <div class="pill on" onclick="pillSelect(this)">All</div>
+      <div class="pill" onclick="pillSelect(this)">Strong Serve</div>
+      <div class="pill" onclick="pillSelect(this)">Net Player</div>
+      <div class="pill" onclick="pillSelect(this)">Lefty</div>
+      <div class="pill" onclick="pillSelect(this)">Weak BH</div>
+      <div class="pill" onclick="pillSelect(this)">Struggles Pressure</div>
+      <div class="pill" onclick="pillSelect(this)">Scheduled</div>
+    </div>
+    <div class="scroll">
+
+      <!-- Upcoming match banner -->
+      <div class="scheduled-bar" onclick="showToast('📅 AI game plan ready for this match!')">
+        <div class="sb-ico">📅</div>
+        <div>
+          <div class="sb-eyebrow">Next Match · Mar 5, 2026</div>
+          <div class="sb-title">Lisa M. &amp; Dana R.</div>
+          <div class="sb-sub">Tap to view AI pre-match game plan</div>
+        </div>
+        <div class="sb-arrow">›</div>
+      </div>
+
+      <div class="sec-hd" style="padding-top:4px;">Opponents</div>
+
+      <!-- Karen T. — Righty, hand icon on RIGHT -->
+      <div class="opp-card" onclick="openScoutModal('karen')">
+        <div class="opp-hd">
+          <div class="opp-avatar" style="background:linear-gradient(135deg,#d4581a,#9a3010);">KT</div>
+          <div>
+            <div class="opp-name">Karen T.</div>
+            <div class="opp-sub">3 matches · Hard Court · Doubles</div>
+          </div>
+          <div class="opp-record win">2W – 1L</div>
+        </div>
+        <!-- #5: Righty — hand icon on the RIGHT side -->
+        <div class="opp-hand-row">
+          <div style="font-size:10px;font-weight:600;color:var(--text-lt);">Dominant Hand</div>
+          <div class="opp-hand-badge">Righty ✋</div>
+        </div>
+        <div class="tags">
+          <span class="tag tag-str">Strong Serve</span>
+          <span class="tag tag-str">Strong Forehand</span>
+          <span class="tag tag-str">Aggressive Net Player</span>
+          <span class="tag tag-wk">Inconsistent Backhand</span>
+          <span class="tag tag-wk">Poor Net Game</span>
+        </div>
+        <div class="opp-strategy">
+          <div class="opp-strat-lbl">🎯 AI Game Plan</div>
+          <div class="opp-strat-txt">Attack backhand relentlessly with topspin. Return deep cross-court. Lob when she nets — her overhead cracks under pressure.</div>
+        </div>
+      </div>
+
+      <!-- Michelle K. — Lefty, hand icon on LEFT -->
+      <div class="opp-card" onclick="openScoutModal('michelle')">
+        <div class="opp-hd">
+          <div class="opp-avatar" style="background:linear-gradient(135deg,#1565c0,#0d3a7a);">MK</div>
+          <div>
+            <div class="opp-name">Michelle K.</div>
+            <div class="opp-sub">2 matches · Hard Court · Doubles</div>
+          </div>
+          <div class="opp-record loss">0W – 2L</div>
+        </div>
+        <!-- #5: Lefty — hand icon on the LEFT side -->
+        <div class="opp-hand-row">
+          <div class="opp-hand-badge">🤚 Lefty</div>
+          <div style="font-size:10px;font-weight:600;color:var(--text-lt);">Dominant Hand</div>
+        </div>
+        <div class="tags">
+          <span class="tag tag-str">Very Consistent</span>
+          <span class="tag tag-str">Good Movement</span>
+          <span class="tag tag-wk">Mental Momentum Swings</span>
+          <span class="tag tag-wk">Struggles Under Pressure</span>
+        </div>
+        <div class="opp-strategy">
+          <div class="opp-strat-lbl">🎯 AI Game Plan</div>
+          <div class="opp-strat-txt">Lob constantly — weak overhead. Use sharp angles to force errors. Get her frustrated early and push on her mental swings.</div>
+        </div>
+      </div>
+
+      <div class="dash-add" onclick="openAddOpponent()">+ Add New Opponent</div>
+      <div style="height:12px;"></div>
+    </div>
+    <nav class="nav">
+      <button class="nav-btn" onclick="navTo('home')"><div class="nav-ico">🏠</div><div class="nav-lbl">Home</div></button>
+      <button class="nav-btn" onclick="navTo('journal')"><div class="nav-ico">📓</div><div class="nav-lbl">Journal</div></button>
+      <button class="nav-btn active" onclick="navTo('scout')"><div class="nav-ico">🕵️</div><div class="nav-lbl">Scout</div></button>
+      <button class="nav-btn" onclick="navTo('goals')"><div class="nav-ico">🎯</div><div class="nav-lbl">Goals</div></button>
+      <button class="nav-btn" onclick="navTo('gear')"><div class="nav-ico">🎾</div><div class="nav-lbl">Gear</div></button>
+    </nav>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       GOALS
+       ══════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-goals">
+    <div class="page-hd">
+      <div class="page-hd-row">
+        <div><div class="page-hd-title">Goals</div><div class="page-hd-sub">3 active · 2 challenge areas</div></div>
+        <button class="fab" onclick="openAddGoal()">+</button>
+      </div>
+    </div>
+    <div class="pills">
+      <div class="pill on" onclick="pillSelect(this)">All</div>
+      <div class="pill" onclick="pillSelect(this)">Technique</div>
+      <div class="pill" onclick="pillSelect(this)">Strategy</div>
+      <div class="pill" onclick="pillSelect(this)">Mental</div>
+      <div class="pill" onclick="pillSelect(this)">Fitness</div>
+    </div>
+    <div class="scroll">
+      <div class="sec-hd" style="padding-top:6px;">Active Goals</div>
+      <div class="goal-card" onclick="openGoalEdit('goal','Backhand topspin consistency','Technique','Roll right wrist through contact. Full follow-through across body every time. Coach Danny — Feb 18.',72,12)">
+        <div class="gc-top"><div class="gc-title">Backhand topspin consistency</div><span class="tag tag-tech">Technique</span></div>
+        <div class="gc-desc">Roll right wrist through contact. Full follow-through across body every time. Coach Danny — Feb 18.</div>
+        <div class="prog-wrap"><div class="prog-fill" style="width:72%;background:linear-gradient(90deg,var(--g600),var(--g700));"></div></div>
+        <div class="gc-pct">72% progress · 12 sessions</div>
+      </div>
+      <div class="goal-card" onclick="openGoalEdit('goal','Mental reset after errors','Mental','Breathe, shake it off, focus on the next point only. One bad shot doesn\'t become three.',55,8)">
+        <div class="gc-top"><div class="gc-title">Mental reset after errors</div><span class="tag tag-mental">Mental</span></div>
+        <div class="gc-desc">Breathe, shake it off, focus on the next point only. One bad shot doesn't become three.</div>
+        <div class="prog-wrap"><div class="prog-fill" style="width:55%;background:linear-gradient(90deg,var(--gold),#c09010);"></div></div>
+        <div class="gc-pct" style="color:var(--gold);">55% progress · 8 sessions</div>
+      </div>
+      <div class="goal-card" onclick="openGoalEdit('goal','Second serve confidence','Strategy','Commit to a kick serve. No more pushing the second serve — trust the mechanics.',40,5)">
+        <div class="gc-top"><div class="gc-title">Second serve confidence</div><span class="tag tag-strategy">Strategy</span></div>
+        <div class="gc-desc">Commit to a kick serve. No more pushing the second serve — trust the mechanics.</div>
+        <div class="prog-wrap"><div class="prog-fill" style="width:40%;background:linear-gradient(90deg,#5b8dd9,var(--blue));"></div></div>
+        <div class="gc-pct" style="color:var(--blue);">40% progress · 5 sessions</div>
+      </div>
+      <div class="sec-hd">Challenge Areas</div>
+      <div class="challenge-card" onclick="openGoalEdit('challenge','Short balls — attack too late','Strategy','When opponents hit short, I\'m not moving forward aggressively enough to take the offense.',0,0)">
+        <div class="cc-title">⚡ Short balls — I attack too late</div>
+        <div class="cc-desc">When opponents hit short, I'm not moving forward aggressively enough to take the offense.</div>
+        <div class="cc-ai">🤖 AI Tip: Start your split-step earlier. Think "forward first" on any ball inside the service line.</div>
+      </div>
+      <div class="challenge-card" onclick="openGoalEdit('challenge','High backhand volleys','Technique','Above-shoulder backhand volleys lack direction and pace at net.',0,0)">
+        <div class="cc-title">⚡ High backhand volleys</div>
+        <div class="cc-desc">Above-shoulder backhand volleys lack direction and pace at net.</div>
+        <div class="cc-ai">🤖 AI Tip: Take high volleys early, punch down at 45°. Firm wrist, short compact swing.</div>
+      </div>
+      <div class="dash-add" onclick="openAddGoal()">+ Add New Goal or Challenge</div>
+      <div style="height:12px;"></div>
+    </div>
+    <nav class="nav">
+      <button class="nav-btn" onclick="navTo('home')"><div class="nav-ico">🏠</div><div class="nav-lbl">Home</div></button>
+      <button class="nav-btn" onclick="navTo('journal')"><div class="nav-ico">📓</div><div class="nav-lbl">Journal</div></button>
+      <button class="nav-btn" onclick="navTo('scout')"><div class="nav-ico">🕵️</div><div class="nav-lbl">Scout</div></button>
+      <button class="nav-btn active" onclick="navTo('goals')"><div class="nav-ico">🎯</div><div class="nav-lbl">Goals</div></button>
+      <button class="nav-btn" onclick="navTo('gear')"><div class="nav-ico">🎾</div><div class="nav-lbl">Gear</div></button>
+    </nav>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       GEAR — #2 emoji 🎾 racket & 👟 shoe icons
+       ══════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-gear">
+    <div class="page-hd">
+      <div class="page-hd-row">
+        <div><div class="page-hd-title">Gear</div><div class="page-hd-sub">Rackets · Shoes · Accessories</div></div>
+        <button class="fab" onclick="openAddGear()">+</button>
+      </div>
+    </div>
+    <div class="scroll">
+
+      <!-- RACKETS — uploaded SVG racket icon -->
+      <div class="sec-hd">Rackets</div>
+      <div class="gear-card" onclick="openGearEdit('racket','Wilson Ultra 100 V4 ★','Main','52 lbs','Grip 4 1/4','No dampener','Dec 2022')">
+        <div class="gear-ico-wrap" style="background:var(--g100);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36">
+            <ellipse cx="50" cy="38" rx="26" ry="30" fill="none" stroke="#2ecc71" stroke-width="5"/>
+            <line x1="35" y1="10" x2="33" y2="66" stroke="#a8e6cf" stroke-width="1.2"/><line x1="42" y1="8" x2="41" y2="68" stroke="#a8e6cf" stroke-width="1.2"/><line x1="50" y1="8" x2="50" y2="68" stroke="#a8e6cf" stroke-width="1.2"/><line x1="58" y1="8" x2="59" y2="68" stroke="#a8e6cf" stroke-width="1.2"/><line x1="65" y1="10" x2="67" y2="66" stroke="#a8e6cf" stroke-width="1.2"/>
+            <line x1="25" y1="20" x2="75" y2="20" stroke="#a8e6cf" stroke-width="1.2"/><line x1="23" y1="28" x2="77" y2="28" stroke="#a8e6cf" stroke-width="1.2"/><line x1="23" y1="36" x2="77" y2="36" stroke="#a8e6cf" stroke-width="1.2"/><line x1="23" y1="44" x2="77" y2="44" stroke="#a8e6cf" stroke-width="1.2"/><line x1="25" y1="52" x2="75" y2="52" stroke="#a8e6cf" stroke-width="1.2"/><line x1="29" y1="60" x2="71" y2="60" stroke="#a8e6cf" stroke-width="1.2"/>
+            <path d="M43 65 L44 75 L56 75 L57 65 Z" fill="#27ae60"/><rect x="44" y="75" width="12" height="20" rx="3" fill="#1a252f"/><line x1="44" y1="79" x2="56" y2="79" stroke="#2c3e50" stroke-width="1.5"/><line x1="44" y1="83" x2="56" y2="83" stroke="#2c3e50" stroke-width="1.5"/><line x1="44" y1="87" x2="56" y2="87" stroke="#2c3e50" stroke-width="1.5"/><line x1="44" y1="91" x2="56" y2="91" stroke="#2c3e50" stroke-width="1.5"/><rect x="43" y="94" width="14" height="4" rx="2" fill="#27ae60"/>
+          </svg>
+        </div>
+        <div style="flex:1;">
+          <div class="gear-name">Wilson Ultra 100 V4 ★</div>
+          <div class="gear-sub">Main Racket · Purchased Dec 2022</div>
+          <div class="gear-specs"><span class="spec main">Main</span><span class="spec hi">52 lbs</span><span class="spec">Grip 4 1/4</span><span class="spec">No dampener</span></div>
+        </div>
+      </div>
+      <div class="gear-card" onclick="openGearEdit('racket','Wilson Ultra 100 V4','Backup','52 lbs','Grip 4 1/4','Butterfly dampener','Apr 2023')">
+        <div class="gear-ico-wrap" style="background:var(--surface);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36">
+            <ellipse cx="50" cy="38" rx="26" ry="30" fill="none" stroke="#7a8fa6" stroke-width="5"/>
+            <line x1="35" y1="10" x2="33" y2="66" stroke="#b8c8d8" stroke-width="1.2"/><line x1="42" y1="8" x2="41" y2="68" stroke="#b8c8d8" stroke-width="1.2"/><line x1="50" y1="8" x2="50" y2="68" stroke="#b8c8d8" stroke-width="1.2"/><line x1="58" y1="8" x2="59" y2="68" stroke="#b8c8d8" stroke-width="1.2"/><line x1="65" y1="10" x2="67" y2="66" stroke="#b8c8d8" stroke-width="1.2"/>
+            <line x1="25" y1="20" x2="75" y2="20" stroke="#b8c8d8" stroke-width="1.2"/><line x1="23" y1="28" x2="77" y2="28" stroke="#b8c8d8" stroke-width="1.2"/><line x1="23" y1="36" x2="77" y2="36" stroke="#b8c8d8" stroke-width="1.2"/><line x1="23" y1="44" x2="77" y2="44" stroke="#b8c8d8" stroke-width="1.2"/><line x1="25" y1="52" x2="75" y2="52" stroke="#b8c8d8" stroke-width="1.2"/><line x1="29" y1="60" x2="71" y2="60" stroke="#b8c8d8" stroke-width="1.2"/>
+            <path d="M43 65 L44 75 L56 75 L57 65 Z" fill="#7a8fa6"/><rect x="44" y="75" width="12" height="20" rx="3" fill="#4a5568"/><line x1="44" y1="79" x2="56" y2="79" stroke="#2c3e50" stroke-width="1.5"/><line x1="44" y1="83" x2="56" y2="83" stroke="#2c3e50" stroke-width="1.5"/><line x1="44" y1="87" x2="56" y2="87" stroke="#2c3e50" stroke-width="1.5"/><line x1="44" y1="91" x2="56" y2="91" stroke="#2c3e50" stroke-width="1.5"/><rect x="43" y="94" width="14" height="4" rx="2" fill="#7a8fa6"/>
+          </svg>
+        </div>
+        <div style="flex:1;">
+          <div class="gear-name">Wilson Ultra 100 V4</div>
+          <div class="gear-sub">Backup Racket · Purchased Apr 2023</div>
+          <div class="gear-specs"><span class="spec">Backup</span><span class="spec hi">52 lbs</span><span class="spec">Grip 4 1/4</span><span class="spec">Butterfly dampener</span></div>
+        </div>
+      </div>
+      <div class="dash-add" onclick="openAddGear()">+ Add Racket</div>
+
+      <!-- SHOES -->
+      <div class="sec-hd">Shoes</div>
+      <div class="shoe-card" onclick="openGearEdit('shoes','Asics Solution Speed FF3','Clay','Size 7.5','Pink','Breaking in','Feb 2026')">
+        <div class="gear-ico-wrap" style="background:var(--orange-bg);">👟</div>
+        <div style="flex:1;">
+          <div class="shoe-hd">
+            <div class="shoe-name">Asics Solution Speed FF3</div>
+            <div class="shoe-surface">Clay</div>
+          </div>
+          <div class="shoe-detail">Size 7.5 · Pink · Purchased Feb 2026 · Breaking in</div>
+        </div>
+      </div>
+      <div class="dash-add" onclick="openAddGear()">+ Add Shoes</div>
+
+      <!-- ACCESSORIES -->
+      <div class="sec-hd">Accessories</div>
+      <div class="acc-card" onclick="openGearEdit('accessory','Adidas Match Wristbands','Wristband','White','Pair','Sweat-wicking','Jan 2026')">
+        <div class="gear-ico-wrap" style="background:var(--gold-bg);">🎽</div>
+        <div style="flex:1;">
+          <div class="gear-name">Adidas Match Wristbands</div>
+          <div class="gear-sub">Accessories · White · Purchased Jan 2026</div>
+          <div class="gear-specs"><span class="spec">Pair</span><span class="spec">Sweat-wicking</span></div>
+        </div>
+      </div>
+      <div class="acc-card" onclick="openGearEdit('accessory','Wilson Tour Backpack','Bag','Black','3 racket capacity','Daily use','Mar 2025')">
+        <div class="gear-ico-wrap" style="background:var(--blue-bg);">🎒</div>
+        <div style="flex:1;">
+          <div class="gear-name">Wilson Tour Backpack</div>
+          <div class="gear-sub">Bag · Black · Holds 3 rackets</div>
+          <div class="gear-specs"><span class="spec">3 racket capacity</span><span class="spec hi">Daily use</span></div>
+        </div>
+      </div>
+      <div class="dash-add" onclick="openAddGear()">+ Add Accessory</div>
+      <div style="height:12px;"></div>
+    </div>
+    <nav class="nav">
+      <button class="nav-btn" onclick="navTo('home')"><div class="nav-ico">🏠</div><div class="nav-lbl">Home</div></button>
+      <button class="nav-btn" onclick="navTo('journal')"><div class="nav-ico">📓</div><div class="nav-lbl">Journal</div></button>
+      <button class="nav-btn" onclick="navTo('scout')"><div class="nav-ico">🕵️</div><div class="nav-lbl">Scout</div></button>
+      <button class="nav-btn" onclick="navTo('goals')"><div class="nav-ico">🎯</div><div class="nav-lbl">Goals</div></button>
+      <button class="nav-btn active" onclick="navTo('gear')"><div class="nav-ico">🎾</div><div class="nav-lbl">Gear</div></button>
+    </nav>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       PROFILE PANEL — #8 Pep Talk Song field added
+       ══════════════════════════════════════════════════ -->
+  <div class="prof-overlay" id="profOverlay" onclick="if(event.target===this)closeProfile()">
+    <div class="prof-panel">
+      <div class="pp-hd">
+        <button class="pp-close-btn" onclick="closeProfile()">✕</button>
+        <div class="pp-av-wrap">
+          <div class="pp-av" id="ppAvDisplay">SR</div>
+          <div class="pp-av-edit" onclick="showToast('📷 Photo picker coming soon!')">✏️</div>
+        </div>
+        <div class="pp-name-disp" id="ppNameDisp">Sarah R.</div>
+        <div class="pp-meta-disp">4.0 USTA · All-Court · Right-handed · Doubles</div>
+      </div>
+      <div class="pp-body">
+        <div class="pp-sec">Personal Information</div>
+        <div class="pp-field"><label>Full Name</label><input class="pp-input" id="ppName" type="text" value="Sarah R." oninput="updateProfileDisplay()"></div>
+        <div class="pp-2col">
+          <div class="pp-field"><label>Gender</label><select class="pp-input"><option selected>Female</option><option>Male</option><option>Non-binary</option><option>Prefer not to say</option></select></div>
+          <div class="pp-field"><label>Birthdate</label><input class="pp-input" type="date"></div>
+        </div>
+        <div class="pp-field"><label>Email</label><input class="pp-input" type="email" placeholder="you@email.com"></div>
+        <div class="pp-field"><label>Cell Phone</label><input class="pp-input" type="tel" value="(555) 000-0000"></div>
+
+        <div class="pp-sec">Sport</div>
+        <div class="pp-field"><label>Select Sport</label>
+          <div class="pp-segs"><button class="pp-seg on" onclick="segSel(this)">🎾 Tennis</button><button class="pp-seg" onclick="segSel(this)">🏓 Pickleball</button></div>
+        </div>
+
+        <div class="pp-sec">Tennis Profile</div>
+        <div class="pp-field"><label>Dominant Hand</label>
+          <div class="pp-segs"><button class="pp-seg on" onclick="segSel(this)">Right ✋</button><button class="pp-seg" onclick="segSel(this)">Left 🤚</button></div>
+        </div>
+        <div class="pp-field"><label>Play Style</label>
+          <div class="pp-segs"><button class="pp-seg" onclick="segSel(this)">Baseline</button><button class="pp-seg on" onclick="segSel(this)">All-Court</button><button class="pp-seg" onclick="segSel(this)">Net</button></div>
+        </div>
+        <div class="pp-field"><label>Singles or Doubles</label>
+          <div class="pp-segs"><button class="pp-seg" onclick="segSel(this)">Singles</button><button class="pp-seg on" onclick="segSel(this)">Doubles</button><button class="pp-seg" onclick="segSel(this)">Both</button></div>
+        </div>
+        <div class="pp-field"><label>Preferred Side</label>
+          <div class="pp-segs"><button class="pp-seg on" onclick="segSel(this)">Deuce</button><button class="pp-seg" onclick="segSel(this)">Ad Court</button></div>
+        </div>
+        <div class="pp-2col">
+          <div class="pp-field"><label>USTA Rating</label><select class="pp-input"><option>2.5</option><option>3.0</option><option>3.5</option><option selected>4.0</option><option>4.5</option><option>5.0+</option></select></div>
+          <div class="pp-field"><label>Preferred Surface</label><select class="pp-input"><option selected>Hard</option><option>Clay</option><option>Grass</option><option>Indoor</option></select></div>
+        </div>
+
+        <div class="pp-sec">Pep Talk &amp; Notifications</div>
+        <div class="pp-notif-row"><div><div class="pp-notif-lbl">Daily Morning Pep Talk</div><div class="pp-notif-sub">Personalized from goals, lessons &amp; history</div></div><div class="toggle" onclick="this.classList.toggle('off')"></div></div>
+        <div class="pp-field" style="margin-top:10px;"><label>Delivery Time</label><input class="pp-input" type="time" value="08:00"></div>
+        <div class="pp-notif-row"><div><div class="pp-notif-lbl">Pre-Match Pep Talk Alert</div><div class="pp-notif-sub">2 hours before scheduled matches</div></div><div class="toggle" onclick="this.classList.toggle('off')"></div></div>
+        <div class="pp-notif-row" style="margin-bottom:12px;"><div><div class="pp-notif-lbl">Sound on Pep Talk</div><div class="pp-notif-sub">Auto-play your Pep Talk Song when pep talk opens</div></div><div class="toggle" id="soundToggleProfile" onclick="this.classList.toggle('off')"></div></div>
+
+        <!-- #8 Pep Talk Song picker -->
+        <div class="pp-field">
+          <label>Pep Talk Song</label>
+          <div class="song-picker-row" onclick="showToast('🎵 Apple Music / Spotify library coming soon!')">
+            <div class="sp-art">🎵</div>
+            <div class="sp-info">
+              <div class="sp-song">Unstoppable</div>
+              <div class="sp-artist">Sia · 0:33</div>
+            </div>
+            <div class="sp-change">Change →</div>
+          </div>
+        </div>
+        <div style="font-size:10px;color:var(--text-lt);margin-top:-6px;margin-bottom:10px;line-height:1.4;">Song plays automatically when your Pep Talk opens. Choose from Apple Music or Spotify. Starts at your preferred timestamp.</div>
+
+        <div class="pp-notif-row" style="border:none;"><div><div class="pp-notif-lbl">Weekly Pep Talks Used</div><div class="pp-notif-sub">3 free per week · Resets Sunday</div></div><div style="font-size:12px;font-weight:700;color:var(--text-lt);">2 / 3</div></div>
+        <button class="pp-save" onclick="saveProfile()">Save Profile ✓</button>
+        <div style="height:12px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay pep-overlay-bg" id="pepOverlay">
+    <div class="sheet" style="padding-bottom:28px;">
+      <div class="sheet-handle"></div>
+
+      <!-- Cinematic animated header -->
+      <div class="pep-sheet-hd">
+        <!-- Fireworks -->
+        <div class="fw fw1">🎆</div>
+        <div class="fw fw2">🎇</div>
+        <div class="fw fw3">✨</div>
+        <div class="fw fw4">🎆</div>
+        <!-- Pom-poms -->
+        <div class="pom-left">🎉</div>
+        <div class="pom-right">🎉</div>
+        <div class="psh-eyebrow">🤖 AI · Personalized for your game · Tone 3.0 🔥</div>
+        <div class="psh-title">You're ready for this.</div>
+        <div class="psh-sub">Built from your goals, lessons &amp; match history · Feb 27, 2026</div>
+
+        <!-- Now Playing bar with EQ bars -->
+        <div class="now-playing" id="nowPlayingBar">
+          <div class="np-art">
+            <span id="npDisc" class="np-spin">💿</span>
+          </div>
+          <div class="np-info">
+            <div class="np-song">Unstoppable</div>
+            <div class="np-artist">Sia · playing from 0:33</div>
+          </div>
+          <div class="np-eq" id="npEq">
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+          </div>
+          <div class="np-controls">
+            <button class="np-soundbtn" id="soundBtn" onclick="togglePepSound()" title="Toggle sound">🔊</button>
+            <button class="np-playbtn" id="playBtn" onclick="togglePepPlay()">⏸</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content blocks — staggered entrance via JS -->
+      <div class="pep-blocks-wrap">
+        <div class="pep-block" id="pepBlock0" style="border-color:var(--gold);">
+          <div class="pb-lbl" style="color:var(--gold);">🧠 Mental Focus</div>
+          <div class="pb-txt">You've been here before and you've won. The only point that matters is the next one. Trust your reset — you've been working on this and it's starting to click.</div>
+        </div>
+        <div class="pep-block" id="pepBlock1">
+          <div class="pb-lbl">🎾 Technique to Own</div>
+          <div class="pb-txt">Your backhand is your weapon right now. Coach Danny's work is showing — let that wrist roll with confidence. Finish across your body and the pace takes care of itself.</div>
+        </div>
+        <div class="pep-block" id="pepBlock2" style="border-color:var(--blue);">
+          <div class="pb-lbl" style="color:var(--blue);">🏆 Match Strategy</div>
+          <div class="pb-txt">Attack early, move forward on short balls, commit to the poach when your partner serves wide. Breathe out at contact on every shot. You've got this.</div>
+        </div>
+        <div class="pep-limit">2 of 3 free pep talks used this week · Resets Sunday</div>
+        <button class="sheet-cta" onclick="closePepModal()">Let's Go!!! 🔥💪🎾</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       LOG JOURNAL SESSION SHEET
+       ══════════════════════════════════════════════════ -->
+  <div class="overlay" id="logOverlay">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-hd">
+        <div class="sheet-title">Log Journal Session</div>
+        <button class="sheet-close" onclick="closeOverlay('logOverlay')">✕</button>
+      </div>
+      <div>
+        <div class="lf-tabs">
+          <div class="lf-tab on" onclick="switchTab(this,'tab-match')">⚡ Match</div>
+          <div class="lf-tab" onclick="switchTab(this,'tab-lesson')">📚 Lesson</div>
+          <div class="lf-tab" onclick="switchTab(this,'tab-practice')">🎾 Practice</div>
+        </div>
+
+        <!-- MATCH TAB -->
+        <div class="lf-pane on" id="tab-match">
+          <div class="lf-row">
+            <div class="lf-field"><label class="lf-label">Date</label><input class="lf-input" type="date" value="2026-02-27"></div>
+            <div class="lf-field"><label class="lf-label">Location</label><input class="lf-input" type="text" placeholder="e.g. Bayshore TC"></div>
+          </div>
+          <div class="lf-field"><label class="lf-label">Format</label>
+            <div class="lf-pills"><div class="lf-pill on" onclick="lfPillRadio(this)">Doubles</div><div class="lf-pill" onclick="lfPillRadio(this)">Singles</div></div>
+          </div>
+          <div class="lf-field"><label class="lf-label">Surface</label>
+            <div class="lf-pills"><div class="lf-pill on" onclick="lfPillRadio(this)">Hard</div><div class="lf-pill" onclick="lfPillRadio(this)">Clay</div><div class="lf-pill" onclick="lfPillRadio(this)">Grass</div><div class="lf-pill" onclick="lfPillRadio(this)">Indoor</div></div>
+          </div>
+          <div class="lf-field"><label class="lf-label">Opponent Name(s)</label><input class="lf-input" type="text" id="opponentInput" placeholder="e.g. Karen T. &amp; Sarah M."></div>
+          <div class="lf-field"><label class="lf-label">League / Tournament</label><input class="lf-input" type="text" placeholder="e.g. USTA Adult 4.0"></div>
+          <div class="lf-field"><label class="lf-label">Score</label>
+            <div class="score-inputs">
+              <div><div class="score-box me">6</div><div style="font-size:9px;text-align:center;color:var(--text-lt);margin-top:2px;">Me</div></div>
+              <div class="score-vs">—</div>
+              <div><div class="score-box">4</div><div style="font-size:9px;text-align:center;color:var(--text-lt);margin-top:2px;">Opp.</div></div>
+              <div style="color:var(--text-lt);font-size:11px;font-weight:600;align-self:center;padding:0 4px;">·</div>
+              <div><div class="score-box me">7</div><div style="font-size:9px;text-align:center;color:var(--text-lt);margin-top:2px;">Me</div></div>
+              <div class="score-vs">—</div>
+              <div><div class="score-box">5</div><div style="font-size:9px;text-align:center;color:var(--text-lt);margin-top:2px;">Opp.</div></div>
+              <div style="font-size:11px;color:var(--g700);font-weight:600;text-decoration:underline;align-self:center;padding-left:6px;cursor:pointer;">+Set 3</div>
+            </div>
+            <div class="result-pills"><div class="result-pill win">✓ Win</div><div class="result-pill">Loss</div><div class="result-pill">No Match</div></div>
+          </div>
+          <div class="lf-field"><label class="lf-label">Goals Worked On</label>
+            <div class="goal-check-list">
+              <div class="goal-check on" onclick="this.classList.toggle('on');this.querySelector('.check-circle').classList.toggle('on')"><div class="check-circle on">✓</div><div class="goal-check-lbl">Backhand topspin consistency</div></div>
+              <div class="goal-check on" onclick="this.classList.toggle('on');this.querySelector('.check-circle').classList.toggle('on')"><div class="check-circle on">✓</div><div class="goal-check-lbl">Breathe out at contact</div></div>
+              <div class="goal-check" onclick="this.classList.toggle('on');this.querySelector('.check-circle').classList.toggle('on')"><div class="check-circle"></div><div class="goal-check-lbl">Second serve confidence</div></div>
+            </div>
+          </div>
+          <div class="lf-field"><label class="lf-label">Rating</label>
+            <div class="lf-star-row"><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span><span class="lf-star">⭐</span></div>
+          </div>
+          <div class="lf-field"><label class="lf-label">What Worked</label><textarea class="lf-input" style="height:54px;resize:none;line-height:1.5;" placeholder="e.g. Backhand felt great today…"></textarea></div>
+          <div class="lf-field"><label class="lf-label">Challenges</label><textarea class="lf-input" style="height:54px;resize:none;line-height:1.5;" placeholder="e.g. Second serve nerves…"></textarea></div>
+          <div class="lf-field"><label class="lf-label">Notes</label><textarea class="lf-input" style="height:54px;resize:none;line-height:1.5;" placeholder="Anything else to remember…"></textarea></div>
+          <button class="save-btn" onclick="closeOverlay('logOverlay');showToast('✅ Match entry saved!')">Save Match Entry</button>
+        </div>
+
+        <!-- LESSON TAB -->
+        <div class="lf-pane" id="tab-lesson">
+          <div class="lf-row">
+            <div class="lf-field"><label class="lf-label">Date</label><input class="lf-input" type="date" value="2026-02-27"></div>
+            <div class="lf-field"><label class="lf-label">Time</label><input class="lf-input" type="time" value="10:00"></div>
+          </div>
+          <div class="lf-field"><label class="lf-label">Coach / Pro Name</label><input class="lf-input" type="text" value="Coach Danny"></div>
+          <div class="lf-field"><label class="lf-label">Other Players</label><input class="lf-input" type="text" placeholder="Optional"></div>
+          <div class="lf-field"><label class="lf-label">Location</label><input class="lf-input" type="text" placeholder="e.g. Bayshore TC"></div>
+          <div class="lf-field"><label class="lf-label">Duration</label>
+            <div class="lf-pills"><div class="lf-pill" onclick="lfPillRadio(this)">30 min</div><div class="lf-pill" onclick="lfPillRadio(this)">1 hr</div><div class="lf-pill on" onclick="lfPillRadio(this)">1.5 hrs</div><div class="lf-pill" onclick="lfPillRadio(this)">2 hrs</div></div>
+          </div>
+          <div class="lf-field"><label class="lf-label">Skills Worked On</label><input class="lf-input" type="text" placeholder="e.g. Backhand approach, return of serve…"></div>
+          <div class="lf-field"><label class="lf-label">Coaching Tips (one per line)</label><textarea class="lf-input" style="height:80px;resize:none;line-height:1.6;" placeholder="e.g. Roll wrist through contact&#10;Finish strokes across body&#10;Breathe out at contact"></textarea></div>
+          <div class="lf-field"><label class="lf-label">Rating</label>
+            <div class="lf-star-row"><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span></div>
+          </div>
+          <div class="lf-field"><label class="lf-label">Notes</label><textarea class="lf-input" style="height:54px;resize:none;line-height:1.5;" placeholder="Follow-up actions, reminders…"></textarea></div>
+          <button class="save-btn" onclick="closeOverlay('logOverlay');showToast('✅ Lesson entry saved! Coach notes updated on Home.')">Save Lesson Entry</button>
+        </div>
+
+        <!-- PRACTICE TAB -->
+        <div class="lf-pane" id="tab-practice">
+          <div class="lf-row">
+            <div class="lf-field"><label class="lf-label">Date</label><input class="lf-input" type="date" value="2026-02-27"></div>
+            <div class="lf-field"><label class="lf-label">Duration</label><input class="lf-input" type="text" placeholder="e.g. 1h 30m"></div>
+          </div>
+          <div class="lf-field"><label class="lf-label">Location</label><input class="lf-input" type="text" placeholder="e.g. Bayshore TC"></div>
+          <div class="lf-field"><label class="lf-label">Surface</label>
+            <div class="lf-pills"><div class="lf-pill on" onclick="lfPillRadio(this)">Hard</div><div class="lf-pill" onclick="lfPillRadio(this)">Clay</div><div class="lf-pill" onclick="lfPillRadio(this)">Grass</div><div class="lf-pill" onclick="lfPillRadio(this)">Indoor</div></div>
+          </div>
+          <div class="lf-field"><label class="lf-label">Goals Worked On</label>
+            <div class="goal-check-list">
+              <div class="goal-check on" onclick="this.classList.toggle('on');this.querySelector('.check-circle').classList.toggle('on')"><div class="check-circle on">✓</div><div class="goal-check-lbl">Backhand topspin consistency</div></div>
+              <div class="goal-check" onclick="this.classList.toggle('on');this.querySelector('.check-circle').classList.toggle('on')"><div class="check-circle"></div><div class="goal-check-lbl">Second serve confidence</div></div>
+            </div>
+          </div>
+          <div class="lf-field"><label class="lf-label">Rating</label>
+            <div class="lf-star-row"><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span><span class="lf-star">⭐</span></div>
+          </div>
+          <div class="lf-field"><label class="lf-label">Notes</label><textarea class="lf-input" style="height:72px;resize:none;line-height:1.5;" placeholder="What clicked? What needs more work?…"></textarea></div>
+          <button class="save-btn" onclick="closeOverlay('logOverlay');showToast('✅ Practice entry saved!')">Save Practice Entry</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       ADD OPPONENT SHEET — #6/#7 tag colors corrected
+       ══════════════════════════════════════════════════ -->
+  <div class="overlay" id="addOppOverlay">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-hd">
+        <div class="sheet-title">Add Opponent</div>
+        <button class="sheet-close" onclick="closeOverlay('addOppOverlay')">✕</button>
+      </div>
+      <div class="lf-field"><label class="lf-label">Name</label><input class="lf-input" type="text" placeholder="e.g. Rachel S. or Rachel Seifer"></div>
+      <div class="lf-field"><label class="lf-label">Dominant Hand</label>
+        <div style="display:flex;gap:10px;">
+          <div class="lf-pill" style="flex:1;text-align:center;" onclick="lfPillRadio(this)">🤚 Lefty</div>
+          <div class="lf-pill" style="flex:1;text-align:center;" onclick="lfPillRadio(this)">Righty ✋</div>
+        </div>
+      </div>
+
+      <!-- Strengths — GREEN (#6) -->
+      <div class="tag-group-lbl str">💪 Strengths (select all that apply)</div>
+      <div class="tag-select-grid">
+        <div class="tag-sel str" onclick="toggleTagSel(this)">Strong Forehand</div>
+        <div class="tag-sel str" onclick="toggleTagSel(this)">Strong Backhand</div>
+        <div class="tag-sel str" onclick="toggleTagSel(this)">Aggressive Net Player</div>
+        <div class="tag-sel str" onclick="toggleTagSel(this)">Strong Serve</div>
+        <div class="tag-sel str" onclick="toggleTagSel(this)">Attacks Short Balls</div>
+        <div class="tag-sel str" onclick="toggleTagSel(this)">Very Consistent</div>
+        <div class="tag-sel str" onclick="toggleTagSel(this)">Good Movement</div>
+        <div class="tag-sel str" onclick="toggleTagSel(this)">Employs Slice Shots</div>
+        <div class="tag-sel str" onclick="toggleTagSel(this)">Strong Drop Shots</div>
+      </div>
+
+      <!-- Weaknesses — RED (#7) -->
+      <div class="tag-group-lbl wk" style="margin-top:14px;">🎯 Weaknesses (select all that apply)</div>
+      <div class="tag-select-grid">
+        <div class="tag-sel wk" onclick="toggleTagSel(this)">Weak Serve</div>
+        <div class="tag-sel wk" onclick="toggleTagSel(this)">Inconsistent Forehand</div>
+        <div class="tag-sel wk" onclick="toggleTagSel(this)">Inconsistent Backhand</div>
+        <div class="tag-sel wk" onclick="toggleTagSel(this)">Poor Net Game</div>
+        <div class="tag-sel wk" onclick="toggleTagSel(this)">Poor Movement</div>
+        <div class="tag-sel wk" onclick="toggleTagSel(this)">Defensive Baseline Player</div>
+        <div class="tag-sel wk" onclick="toggleTagSel(this)">Mental Momentum Swings</div>
+        <div class="tag-sel wk" onclick="toggleTagSel(this)">Struggles Under Pressure</div>
+      </div>
+
+      <div class="tag-group-lbl neu" style="margin-top:14px;">📝 Free-Text Notes</div>
+      <textarea class="notes-area" placeholder="e.g. Very tall, uses kick serve. Gets tight in tiebreaks…"></textarea>
+      <button class="save-btn" onclick="closeOverlay('addOppOverlay');showToast('✅ Opponent saved to Scout!')">Save Opponent</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       SCOUT DETAIL SHEET
+       ══════════════════════════════════════════════════ -->
+  <div class="overlay" id="scoutOverlay">
+    <div class="sheet" id="scoutSheetContent"></div>
+  </div>
+
+</div><!-- /phone -->
+
+<script>
+/* ── NAV ─────────────────────────────── */
+let homeAnimated = false;
+function navTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  const map = {home:0,journal:1,scout:2,goals:3,gear:4};
+  document.querySelectorAll('#screen-' + id + ' .nav-btn').forEach((btn,i) => {
+    btn.classList.toggle('active', i === map[id]);
+  });
+  if (id === 'home' && !homeAnimated) {
+    homeAnimated = true;
+    setTimeout(triggerHomeAnimations, 120);
+  }
+}
+
+/* ── TOAST ───────────────────────────── */
+let _tt;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(_tt);
+  _tt = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ── PILLS ───────────────────────────── */
+function pillSelect(el) {
+  el.closest('.pills').querySelectorAll('.pill').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+}
+function lfPillRadio(el) {
+  const parent = el.closest('.lf-pills') || el.parentElement;
+  parent.querySelectorAll('.lf-pill').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+}
+
+/* ── JOURNAL FILTER ──────────────────── */
+function filterJournal(type, el) {
+  pillSelect(el);
+  document.querySelectorAll('#journalScroll .journal-item').forEach(item => {
+    item.style.display = (type === 'all' || item.dataset.type === type) ? '' : 'none';
+  });
+}
+
+/* ── OVERLAYS ────────────────────────── */
+function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.overlay').forEach(ov => {
+  ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('open'); });
+});
+function openAddOpponent() { document.getElementById('addOppOverlay').classList.add('open'); }
+
+/* ── STATS COUNTER ANIMATION ─────────────── */
+function triggerHomeAnimations() {
+  // Chip pop-in
+  const chips = document.querySelectorAll('.stat-chip');
+  chips.forEach((chip, i) => {
+    setTimeout(() => chip.style.cssText += ';opacity:1;transform:translateY(0);', 80 + i * 100);
+  });
+  // Number count-up
+  chips.forEach(chip => {
+    const val = chip.querySelector('[data-target]');
+    if (!val) return;
+    const target = parseInt(val.dataset.target);
+    const suffix = val.dataset.suffix || '';
+    let current = 0;
+    const steps = 28;
+    const inc = target / steps;
+    const interval = setInterval(() => {
+      current = Math.min(current + inc, target);
+      val.textContent = Math.round(current) + suffix;
+      if (current >= target) clearInterval(interval);
+    }, 30);
+  });
+  // W/L stat special case
+  setTimeout(() => {
+    const wl = document.getElementById('wlStat');
+    if (wl) { let w=0,l=0; const iv=setInterval(()=>{ if(w<14)w++; if(l<10)l++; wl.textContent=w+'–'+l; if(w>=14&&l>=10)clearInterval(iv);},55);}
+  }, 200);
+}
+
+/* ── PEP TALK — cinematic ────────────────── */
+let pepPlaying = true;
+let pepSoundOn = true;
+
+function openPepModal() {
+  pepPlaying = true;
+  pepSoundOn = true;
+  document.getElementById('pepOverlay').classList.add('open');
+  document.getElementById('playBtn').textContent = '⏸';
+  document.getElementById('soundBtn').textContent = '🔊';
+  const disc = document.getElementById('npDisc');
+  disc.classList.remove('paused');
+  const eq = document.getElementById('npEq');
+  if (eq) eq.classList.remove('paused');
+  // Stagger content blocks in
+  ['pepBlock0','pepBlock1','pepBlock2'].forEach((id, i) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('pv');
+    }, 750 + i * 200);
+  });
+}
+
+function closePepModal() {
+  closeOverlay('pepOverlay');
+  pepPlaying = false;
+  document.getElementById('npDisc').classList.add('paused');
+  const eq = document.getElementById('npEq');
+  if (eq) eq.classList.add('paused');
+  // Reset blocks for next open
+  setTimeout(() => {
+    ['pepBlock0','pepBlock1','pepBlock2'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('pv');
+    });
+  }, 400);
+}
+
+function togglePepPlay() {
+  pepPlaying = !pepPlaying;
+  document.getElementById('playBtn').textContent = pepPlaying ? '⏸' : '▶';
+  const disc = document.getElementById('npDisc');
+  const eq = document.getElementById('npEq');
+  if (pepPlaying) { disc.classList.remove('paused'); if(eq) eq.classList.remove('paused'); }
+  else            { disc.classList.add('paused');    if(eq) eq.classList.add('paused'); }
+}
+
+function togglePepSound() {
+  pepSoundOn = !pepSoundOn;
+  document.getElementById('soundBtn').textContent = pepSoundOn ? '🔊' : '🔇';
+  showToast(pepSoundOn ? '🔊 Sound on' : '🔇 Sound off');
+}
+
+/* ── TAB SWITCH ──────────────────────── */
+function switchTab(tabEl, paneId) {
+  tabEl.closest('.lf-tabs').querySelectorAll('.lf-tab').forEach(t => t.classList.remove('on'));
+  tabEl.classList.add('on');
+  tabEl.closest('div').parentElement.querySelectorAll('.lf-pane').forEach(p => p.classList.remove('on'));
+  document.getElementById(paneId).classList.add('on');
+}
+
+/* ── TAG SELECTOR ────────────────────── */
+function toggleTagSel(el) { el.classList.toggle('on'); }
+
+/* ── SCOUT DETAIL MODAL ──────────────── */
+const scoutData = {
+  karen: {
+    name:'Karen T.', initials:'KT', color:'linear-gradient(135deg,#d4581a,#9a3010)',
+    record:'2W – 1L', sub:'3 matches · Hard Court · Doubles',
+    hand:'right',
+    tags:[
+      {t:'Strong Serve',cls:'tag-str'},{t:'Strong Forehand',cls:'tag-str'},
+      {t:'Aggressive Net Player',cls:'tag-str'},
+      {t:'Inconsistent Backhand',cls:'tag-wk'},{t:'Poor Net Game',cls:'tag-wk'}
+    ],
+    strengths:'Flat powerful serve, aggressive cross-court forehand, confident at net. Rarely gets rattled emotionally.',
+    weaknesses:'Backhand breaks under pressure — especially high balls. Overhead is a liability on lobs. Gets frustrated after being broken on serve.',
+    gameplan:'Attack the backhand with looping topspin. Return deep cross-court to neutralize her serve. Lob when she rushes net — look for the overhead miss.'
+  },
+  michelle: {
+    name:'Michelle K.', initials:'MK', color:'linear-gradient(135deg,#1565c0,#0d3a7a)',
+    record:'0W – 2L', sub:'2 matches · Hard Court · Doubles',
+    hand:'left',
+    tags:[
+      {t:'Very Consistent',cls:'tag-str'},{t:'Good Movement',cls:'tag-str'},
+      {t:'Mental Momentum Swings',cls:'tag-wk'},{t:'Struggles Under Pressure',cls:'tag-wk'}
+    ],
+    strengths:'Extremely consistent off the baseline, rarely misses, great court coverage. Lefty spin causes problems on the ad side.',
+    weaknesses:'Overhead is weak — visibly nervous on lobs. Gets rattled when she starts missing. Struggles closing out tight sets.',
+    gameplan:'Lob frequently and early. Mix pace to force unforced errors. Push on her mental swings — when she starts missing, pressure every point.'
+  }
+};
+
+function openScoutModal(key) {
+  const d = scoutData[key]; if (!d) return;
+  const tagHtml = d.tags.map(t => `<span class="tag ${t.cls}">${t.t}</span>`).join('');
+  // #5: hand badge position — lefty on left, righty on right
+  const handRow = d.hand === 'left'
+    ? `<div class="opp-hand-row"><div class="opp-hand-badge">🤚 Lefty</div><div style="font-size:10px;font-weight:600;color:var(--text-lt);">Dominant Hand</div></div>`
+    : `<div class="opp-hand-row"><div style="font-size:10px;font-weight:600;color:var(--text-lt);">Dominant Hand</div><div class="opp-hand-badge">Righty ✋</div></div>`;
+
+  document.getElementById('scoutSheetContent').innerHTML = `
+    <div class="sheet-handle"></div>
+    <div class="sheet-hd">
+      <div style="display:flex;align-items:center;gap:10px;flex:1;">
+        <div style="width:38px;height:38px;border-radius:50%;background:${d.color};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:white;flex-shrink:0;">${d.initials}</div>
+        <div style="flex:1;">
+          <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text);">${d.name}</div>
+          <div style="font-size:10px;color:var(--text-lt);font-weight:500;">${d.sub}</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:var(--g700);">${d.record}</div>
+      </div>
+      <button class="sheet-close" onclick="closeOverlay('scoutOverlay')" style="margin-left:8px;">✕</button>
+    </div>
+    ${handRow}
+    <div style="margin-bottom:12px;"><div class="tags">${tagHtml}</div></div>
+    <div class="scout-block">
+      <div class="sb-icon-lrg">💪</div>
+      <div><div class="sb-blabel" style="color:var(--g700);">Strengths</div><div class="sb-btext">${d.strengths}</div></div>
+    </div>
+    <div class="scout-block" style="background:var(--red-bg);">
+      <div class="sb-icon-lrg">🎯</div>
+      <div><div class="sb-blabel" style="color:var(--red);">Weaknesses to Exploit</div><div class="sb-btext">${d.weaknesses}</div></div>
+    </div>
+    <div class="scout-block" style="background:var(--blue-bg);">
+      <div class="sb-icon-lrg">🤖</div>
+      <div><div class="sb-blabel" style="color:var(--blue);">AI Game Plan</div><div class="sb-btext">${d.gameplan}</div></div>
+    </div>
+    <button class="sheet-cta" onclick="closeOverlay('scoutOverlay')">Got it — I'm ready ✓</button>
+  `;
+  document.getElementById('scoutOverlay').classList.add('open');
+}
+
+/* ── PROFILE ─────────────────────────── */
+function openProfile()  { document.getElementById('profOverlay').classList.add('open'); }
+function closeProfile() { document.getElementById('profOverlay').classList.remove('open'); }
+function updateProfileDisplay() {
+  const name = document.getElementById('ppName').value.trim();
+  const ini = name ? name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2) : 'SR';
+  document.getElementById('ppAvDisplay').textContent = ini;
+  document.getElementById('initialsBtn').textContent = ini;
+  document.getElementById('ppNameDisp').textContent = name || 'Your Profile';
+  document.getElementById('homeName').textContent = name.split(' ')[0] || 'Player';
+}
+function segSel(btn) {
+  btn.closest('.pp-segs').querySelectorAll('.pp-seg').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+}
+function saveProfile() { updateProfileDisplay(); closeProfile(); showToast('✅ Profile saved!'); }
+
+/* ── SPORT SELECT SPLASH ─────────────── */
+function selectSport(el) {
+  document.querySelectorAll('.splash-sport').forEach(s => s.classList.remove('on'));
+  el.classList.add('on');
+}
+
+/* ── TIER 1: ONBOARDING ──────────────── */
+let obStep = 0;
+function obNext(next) {
+  document.getElementById('ob-step-' + obStep).classList.remove('active');
+  document.getElementById('obdot' + obStep).classList.remove('active');
+  document.getElementById('obdot' + obStep).classList.add('done');
+  obStep = next;
+  document.getElementById('ob-step-' + obStep).classList.add('active');
+  document.getElementById('obdot' + obStep).classList.add('active');
+}
+function obSeg(el) {
+  el.closest('.ob-segs').querySelectorAll('.ob-seg').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+}
+
+/* ── TIER 1: SHEET HELPERS ───────────── */
+function openScheduledDetail() { document.getElementById('scheduledOverlay').classList.add('open'); }
+function openAddGoal()  { document.getElementById('addGoalOverlay').classList.add('open'); }
+function openAddGear()  { document.getElementById('addGearOverlay').classList.add('open'); }
+function openLogSheet() { document.getElementById('logOverlay').classList.add('open'); }
+
+function openDeleteConfirm(type, name) {
+  document.getElementById('delTitle').textContent = 'Delete ' + type + '?';
+  document.getElementById('delSub').textContent = '"' + name + '" will be permanently removed from your RallyMind account. This cannot be undone.';
+  document.getElementById('deleteOverlay').classList.add('open');
+}
+function selectGearType(btn, formId) {
+  document.querySelectorAll('.gear-type-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.gear-form-section').forEach(s => s.classList.remove('active'));
+  document.getElementById(formId).classList.add('active');
+}
+function catSel(el) {
+  el.closest('.cat-grid').querySelectorAll('.cat-btn').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+}
+function switchTab(tabEl, paneId) {
+  tabEl.closest('.lf-tabs').querySelectorAll('.lf-tab').forEach(t => t.classList.remove('on'));
+  tabEl.classList.add('on');
+  tabEl.closest('.sheet').querySelectorAll('.lf-pane').forEach(p => p.classList.remove('on'));
+  document.getElementById(paneId).classList.add('on');
+}
+function starRate(el) {
+  const stars = el.closest('.lf-star-row').querySelectorAll('.lf-star');
+  const idx = Array.from(stars).indexOf(el);
+  stars.forEach((s, i) => s.classList.toggle('on', i <= idx));
+}
+
+/* ── GOALS: add fab wiring ───────────── */
+function openGoalFab() { openAddGoal(); }
+function openGearFab() { openAddGear(); }
+
+/* ── REAL TIME CLOCK ─────────────────── */
+function updateClock() {
+  const el = document.getElementById('liveTime');
+  if (!el) return;
+  const now = new Date();
+  let h = now.getHours(), m = now.getMinutes();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  el.textContent = h + ':' + String(m).padStart(2,'0') + ' ' + ampm;
+}
+updateClock();
+setInterval(updateClock, 10000);
+
+/* ── GOAL / CHALLENGE ADD — type toggle ── */
+function gcToggleType(type) {
+  const isGoal = type === 'goal';
+  document.getElementById('gc-type-goal').style.cssText = isGoal
+    ? 'flex:1;padding:10px;text-align:center;font-size:12px;font-weight:700;background:var(--g700);color:white;cursor:pointer;'
+    : 'flex:1;padding:10px;text-align:center;font-size:12px;font-weight:700;background:var(--surface);color:var(--text-lt);cursor:pointer;';
+  document.getElementById('gc-type-challenge').style.cssText = !isGoal
+    ? 'flex:1;padding:10px;text-align:center;font-size:12px;font-weight:700;background:var(--g700);color:white;cursor:pointer;'
+    : 'flex:1;padding:10px;text-align:center;font-size:12px;font-weight:700;background:var(--surface);color:var(--text-lt);cursor:pointer;';
+  document.getElementById('gc-goal-fields').style.display = isGoal ? 'block' : 'none';
+  document.getElementById('gc-challenge-fields').style.display = isGoal ? 'none' : 'block';
+  document.getElementById('gc-save-btn').textContent = isGoal ? 'Add Goal' : 'Add Challenge Area';
+}
+
+/* ── GOAL EDIT SHEET ─────────────────── */
+let _currentEditItem = '';
+function openGoalEdit(type, title, cat, desc, pct, sessions) {
+  _currentEditItem = title;
+  document.getElementById('geTitle').textContent = type === 'challenge' ? 'Challenge Area' : 'Goal Detail';
+  document.getElementById('ge-read-title').textContent = title;
+  document.getElementById('ge-read-cat').textContent = cat + (sessions > 0 ? ' · ' + sessions + ' sessions' : '');
+  document.getElementById('ge-read-desc').textContent = desc;
+  document.getElementById('ge-read-bar').style.width = pct + '%';
+  document.getElementById('ge-read-pct').textContent = pct > 0 ? pct + '% progress' : 'Challenge area — track via sessions';
+  document.getElementById('ge-edit-title').value = title;
+  document.getElementById('ge-edit-desc').value = desc;
+  document.getElementById('ge-edit-slider').value = pct;
+  document.getElementById('ge-edit-pct-lbl').textContent = pct + '%';
+  // Show read view, hide edit view
+  document.getElementById('ge-read-view').style.display = 'block';
+  document.getElementById('ge-edit-view').style.display = 'none';
+  document.getElementById('goalEditOverlay').classList.add('open');
+}
+function geToggleEdit() {
+  const rv = document.getElementById('ge-read-view');
+  const ev = document.getElementById('ge-edit-view');
+  const showEdit = rv.style.display !== 'none';
+  rv.style.display = showEdit ? 'none' : 'block';
+  ev.style.display = showEdit ? 'block' : 'none';
+}
+
+/* ── GEAR EDIT SHEET ─────────────────── */
+function openGearEdit(type, name, field1, field2, field3, field4, date) {
+  _currentEditItem = name;
+  const typeLabels = {racket:'Racket', shoes:'Shoes', accessory:'Accessory'};
+  document.getElementById('gearEditTitle').textContent = typeLabels[type] || 'Gear';
+  document.getElementById('gear-read-name').textContent = name;
+  document.getElementById('gear-read-sub').textContent = typeLabels[type] + ' · Purchased ' + date;
+  // Build spec rows
+  const specs = [field1, field2, field3, field4].filter(Boolean);
+  document.getElementById('gear-read-specs').innerHTML = `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px;">${specs.map(s => `<span style="background:var(--surface);border:1.5px solid var(--divider);border-radius:20px;padding:4px 11px;font-size:11px;font-weight:700;color:var(--text-mid);">${s}</span>`).join('')}</div>`;
+  // Populate edit name
+  document.getElementById('gear-edit-name').value = name;
+  // Extra edit fields by type
+  let extra = '';
+  if (type === 'racket') {
+    extra = `<div class="lf-row"><div class="lf-field"><label class="lf-label">String Tension</label><input class="lf-input" type="text" value="${field2}"></div><div class="lf-field"><label class="lf-label">Grip Size</label><input class="lf-input" type="text" value="${field3}"></div></div><div class="lf-field"><label class="lf-label">Dampener</label><input class="lf-input" type="text" value="${field4}"></div>`;
+  } else if (type === 'shoes') {
+    extra = `<div class="lf-field"><label class="lf-label">Surface</label><input class="lf-input" type="text" value="${field1}"></div><div class="lf-row"><div class="lf-field"><label class="lf-label">Size</label><input class="lf-input" type="text" value="${field2}"></div><div class="lf-field"><label class="lf-label">Color</label><input class="lf-input" type="text" value="${field3}"></div></div>`;
+  } else {
+    extra = `<div class="lf-field"><label class="lf-label">Type</label><input class="lf-input" type="text" value="${field1}"></div><div class="lf-field"><label class="lf-label">Details</label><input class="lf-input" type="text" value="${field3}"></div>`;
+  }
+  document.getElementById('gear-edit-extra').innerHTML = extra;
+  document.getElementById('gear-read-view').style.display = 'block';
+  document.getElementById('gear-edit-view').style.display = 'none';
+  document.getElementById('gearEditOverlay').classList.add('open');
+}
+function gearToggleEdit() {
+  const rv = document.getElementById('gear-read-view');
+  const ev = document.getElementById('gear-edit-view');
+  const showEdit = rv.style.display !== 'none';
+  rv.style.display = showEdit ? 'none' : 'block';
+  ev.style.display = showEdit ? 'block' : 'none';
+}
+
+/* ── DELETE FROM EDIT SHEETS ─────────── */
+function openDeleteFromEdit(context) {
+  if (context === 'goal') {
+    closeOverlay('goalEditOverlay');
+    openDeleteConfirm('goal', _currentEditItem);
+  } else {
+    closeOverlay('gearEditOverlay');
+    openDeleteConfirm('gear item', _currentEditItem);
+  }
+}
+</script>
+
+  <!-- ══════════════════════════════════════════
+       SIGN IN SCREEN
+  ══════════════════════════════════════════ -->
+  <div class="screen" id="screen-signin">
+    <div class="si-wrap">
+      <button class="si-back" onclick="navTo('splash')">‹ Back</button>
+      <div class="si-mark">🎾</div>
+      <div class="si-title">Welcome back.</div>
+      <div class="si-sub">Sign in to RallyMind and get back on the court.</div>
+      <div class="si-field"><label>Email</label><input class="si-input" type="email" placeholder="you@email.com"></div>
+      <div class="si-field"><label>Password</label><input class="si-input" type="password" placeholder="••••••••"></div>
+      <button class="si-cta" onclick="navTo('home');triggerHomeAnimations()">Sign In</button>
+      <button class="si-forgot" onclick="showToast('📧 Password reset link sent!')">Forgot password?</button>
+      <div class="si-divider"><div class="si-divider-line"></div><div class="si-divider-txt">or continue with</div><div class="si-divider-line"></div></div>
+      <button class="si-social" onclick="navTo('home');triggerHomeAnimations()">🍎 &nbsp;Continue with Apple</button>
+      <button class="si-social" onclick="navTo('home');triggerHomeAnimations()">🔵 &nbsp;Continue with Google</button>
+      <div class="si-switch">Don't have an account? <span class="si-switch-link" onclick="navTo('onboarding')">Get started free →</span></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ONBOARDING (5 steps)
+  ══════════════════════════════════════════ -->
+  <div class="screen" id="screen-onboarding">
+    <div class="ob-wrap">
+      <div class="ob-progress">
+        <div class="ob-dot active" id="obdot0"></div>
+        <div class="ob-dot" id="obdot1"></div>
+        <div class="ob-dot" id="obdot2"></div>
+        <div class="ob-dot" id="obdot3"></div>
+        <div class="ob-dot" id="obdot4"></div>
+      </div>
+      <!-- Step 0 -->
+      <div class="ob-step active" id="ob-step-0">
+        <div class="ob-icon">👋</div>
+        <div class="ob-title">First, what's your name?</div>
+        <div class="ob-sub">We'll personalize your pep talks and game plans with your first name.</div>
+        <div class="ob-field"><label>Full Name</label><input class="ob-input" type="text" placeholder="e.g. Sarah Rivera"></div>
+        <div class="ob-field"><label>Email</label><input class="ob-input" type="email" placeholder="you@email.com"></div>
+        <div class="ob-field"><label>Password</label><input class="ob-input" type="password" placeholder="Create a password (8+ chars)"></div>
+        <div class="ob-spacer"></div>
+        <div class="ob-actions">
+          <button class="ob-next" onclick="obNext(1)">Continue →</button>
+          <button class="ob-skip" onclick="navTo('signin')">Already have an account? Sign in</button>
+        </div>
+      </div>
+      <!-- Step 1 -->
+      <div class="ob-step" id="ob-step-1">
+        <div class="ob-icon">🎾</div>
+        <div class="ob-title">Tell us about your game.</div>
+        <div class="ob-sub">This personalizes your AI pep talks and opponent strategy cards.</div>
+        <div class="ob-field"><label>Dominant Hand</label><div class="ob-segs"><div class="ob-seg" onclick="obSeg(this)">🤚 Left-handed</div><div class="ob-seg on" onclick="obSeg(this)">✋ Right-handed</div></div></div>
+        <div class="ob-field"><label>Play Style</label><div class="ob-segs"><div class="ob-seg" onclick="obSeg(this)">Baseline</div><div class="ob-seg on" onclick="obSeg(this)">All-Court</div><div class="ob-seg" onclick="obSeg(this)">Net Player</div></div></div>
+        <div class="ob-field"><label>I usually play</label><div class="ob-segs"><div class="ob-seg" onclick="obSeg(this)">Singles</div><div class="ob-seg on" onclick="obSeg(this)">Doubles</div><div class="ob-seg" onclick="obSeg(this)">Both</div></div></div>
+        <div class="ob-field"><label>Preferred Doubles Side</label><div class="ob-segs"><div class="ob-seg on" onclick="obSeg(this)">Deuce Court</div><div class="ob-seg" onclick="obSeg(this)">Ad Court</div><div class="ob-seg" onclick="obSeg(this)">Both</div></div></div>
+        <div class="ob-spacer"></div>
+        <div class="ob-actions"><button class="ob-next" onclick="obNext(2)">Continue →</button><button class="ob-skip" onclick="obNext(2)">Skip for now</button></div>
+      </div>
+      <!-- Step 2 -->
+      <div class="ob-step" id="ob-step-2">
+        <div class="ob-icon">🏆</div>
+        <div class="ob-title">What's your level?</div>
+        <div class="ob-sub">Your rating helps calibrate the depth of strategy in your AI game plans.</div>
+        <div class="ob-field"><label>USTA Rating</label>
+          <select class="ob-select"><option>2.5 — Just starting competitive play</option><option>3.0 — Developing consistency</option><option>3.5 — Learning tactics and control</option><option selected>4.0 — Dependable strokes with strategy</option><option>4.5 — Strong all-around game</option><option>5.0+ — Advanced competitive player</option><option>Unrated — I'm new to USTA</option></select>
+        </div>
+        <div class="ob-field"><label>Preferred Surface</label><div class="ob-segs"><div class="ob-seg on" onclick="obSeg(this)">Hard</div><div class="ob-seg" onclick="obSeg(this)">Clay</div><div class="ob-seg" onclick="obSeg(this)">Grass</div><div class="ob-seg" onclick="obSeg(this)">Indoor</div></div></div>
+        <div class="ob-spacer"></div>
+        <div class="ob-actions"><button class="ob-next" onclick="obNext(3)">Continue →</button><button class="ob-skip" onclick="obNext(3)">Skip for now</button></div>
+      </div>
+      <!-- Step 3 -->
+      <div class="ob-step" id="ob-step-3">
+        <div class="ob-icon">🎯</div>
+        <div class="ob-title">What's your #1 goal right now?</div>
+        <div class="ob-sub">You can add more goals later. This gives your first pep talk something to work with.</div>
+        <div class="ob-field"><label>Goal</label><input class="ob-input" type="text" placeholder="e.g. Improve my second serve kick"></div>
+        <div class="ob-field"><label>Category</label><div class="ob-segs"><div class="ob-seg on" onclick="obSeg(this)">Technique</div><div class="ob-seg" onclick="obSeg(this)">Strategy</div><div class="ob-seg" onclick="obSeg(this)">Mental</div><div class="ob-seg" onclick="obSeg(this)">Fitness</div></div></div>
+        <div class="ob-spacer"></div>
+        <div class="ob-actions"><button class="ob-next" onclick="obNext(4)">Continue →</button><button class="ob-skip" onclick="obNext(4)">Skip for now</button></div>
+      </div>
+      <!-- Step 4 -->
+      <div class="ob-step" id="ob-step-4">
+        <div class="ob-icon">🔔</div>
+        <div class="ob-title">Set up your pep talk.</div>
+        <div class="ob-sub">Your daily pep talk is AI-generated from your goals, coach notes, and match history.</div>
+        <div class="ob-notif-row"><div><div class="ob-notif-lbl">Daily Pep Talk</div><div class="ob-notif-sub">Personalized each morning</div></div><div class="toggle" onclick="this.classList.toggle('off')"></div></div>
+        <div class="ob-notif-row"><div><div class="ob-notif-lbl">Pre-Match Alert</div><div class="ob-notif-sub">2 hours before your scheduled matches</div></div><div class="toggle" onclick="this.classList.toggle('off')"></div></div>
+        <div class="ob-notif-row"><div><div class="ob-notif-lbl">Pep Talk Song</div><div class="ob-notif-sub">Auto-plays when your pep talk opens</div></div><div class="toggle" onclick="this.classList.toggle('off')"></div></div>
+        <div class="ob-song-row" onclick="showToast('🎵 Apple Music &amp; Spotify coming soon!')">
+          <div style="width:30px;height:30px;border-radius:6px;background:linear-gradient(135deg,#9c27b0,#6a1b9a);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🎵</div>
+          <div style="flex:1;"><div style="font-size:12px;font-weight:700;color:white;">Unstoppable — Sia</div><div style="font-size:10px;color:rgba(255,255,255,0.45);font-weight:500;">Default · starts at 0:33 · tap to change</div></div>
+          <div style="font-size:11px;font-weight:700;color:var(--g600);">Change →</div>
+        </div>
+        <div class="ob-spacer"></div>
+        <div class="ob-actions"><button class="ob-next" onclick="navTo('home');triggerHomeAnimations()">Let's Go! 🎾</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       OVERLAYS — Scheduled Match, Add Goal,
+       Add Gear, Log Session, Delete Confirm
+  ══════════════════════════════════════════ -->
+  <div class="overlay" id="scheduledOverlay">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-hd">
+        <div><div class="sheet-title">Scheduled Match</div><div style="font-size:11px;color:var(--text-lt);font-weight:500;margin-top:2px;">Mar 5, 2026 · 2:00 PM</div></div>
+        <button class="sheet-close" onclick="closeOverlay('scheduledOverlay')">✕</button>
+      </div>
+      <div style="background:var(--gold-bg);border:1px solid #f0d85a;border-radius:var(--r-md);padding:13px 14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:28px;">📅</span>
+        <div><div style="font-size:14px;font-weight:700;color:var(--text);">vs. Lisa M. &amp; Dana R.</div><div style="font-size:11px;color:var(--text-lt);font-weight:500;">Women's Doubles · USTA League 4.0</div></div>
+      </div>
+      <div class="match-detail-row"><div class="md-lbl">📍 Location</div><div class="md-val">Bayshore TC · Court 3</div></div>
+      <div class="match-detail-row"><div class="md-lbl">🎾 Surface</div><div class="md-val">Hard Court (outdoor)</div></div>
+      <div class="match-detail-row"><div class="md-lbl">⏰ Time</div><div class="md-val">2:00 PM · est. 1h 45m</div></div>
+      <div class="match-detail-row"><div class="md-lbl">🏆 Format</div><div class="md-val">Best of 3 sets</div></div>
+      <div class="match-detail-row"><div class="md-lbl">🤝 Partner</div><div class="md-val">Not yet added</div></div>
+      <div class="prep-card">
+        <div class="prep-lbl">🤖 AI Pre-Match Game Plan</div>
+        <div class="prep-txt">Lisa M. has a strong first serve and aggressive net presence. Dana R. is consistent but loses pace under pressure. Plan: Return deep cross-court to Lisa, attack Dana's backhand with topspin, lob early to expose the overhead. Stay aggressive — don't let them settle.</div>
+      </div>
+      <div class="match-action-row">
+        <button class="save-btn" style="flex:1;margin-top:0;" onclick="closeOverlay('scheduledOverlay');openLogSheet();showToast('Log your match result!')">Mark as Played ✓</button>
+        <button class="match-sec-btn" onclick="openDeleteConfirm('match','Scheduled vs Lisa M. &amp; Dana R.')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Goal & Challenge ADD sheet -->
+  <div class="overlay" id="addGoalOverlay">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-hd"><div class="sheet-title">Add Goal or Challenge</div><button class="sheet-close" onclick="closeOverlay('addGoalOverlay')">✕</button></div>
+      <!-- Type toggle -->
+      <div class="lf-field">
+        <div style="display:flex;gap:0;border:1.5px solid var(--divider);border-radius:var(--r-sm);overflow:hidden;">
+          <div id="gc-type-goal" style="flex:1;padding:10px;text-align:center;font-size:12px;font-weight:700;background:var(--g700);color:white;cursor:pointer;" onclick="gcToggleType('goal')">🎯 Goal</div>
+          <div id="gc-type-challenge" style="flex:1;padding:10px;text-align:center;font-size:12px;font-weight:700;background:var(--surface);color:var(--text-lt);cursor:pointer;" onclick="gcToggleType('challenge')">⚡ Challenge Area</div>
+        </div>
+      </div>
+      <!-- Goal fields -->
+      <div id="gc-goal-fields">
+        <div class="lf-field"><label class="lf-label">Goal Title</label><input class="lf-input" type="text" placeholder="e.g. Improve my second serve kick"></div>
+        <div class="lf-field"><label class="lf-label">Description (optional)</label><textarea class="lf-input" style="height:52px;resize:none;line-height:1.5;" placeholder="What does mastering this look like?…"></textarea></div>
+        <div class="lf-field"><label class="lf-label">Category</label>
+          <div class="cat-grid">
+            <div class="cat-btn on" onclick="catSel(this)"><div class="cat-ico">🎾</div><div class="cat-lbl">Technique</div></div>
+            <div class="cat-btn" onclick="catSel(this)"><div class="cat-ico">♟️</div><div class="cat-lbl">Strategy</div></div>
+            <div class="cat-btn" onclick="catSel(this)"><div class="cat-ico">🧠</div><div class="cat-lbl">Mental</div></div>
+            <div class="cat-btn" onclick="catSel(this)"><div class="cat-ico">💪</div><div class="cat-lbl">Fitness</div></div>
+          </div>
+        </div>
+        <div class="lf-field"><label class="lf-label">Target</label><div class="lf-pills"><div class="lf-pill on" onclick="lfPillRadio(this)">5 sessions</div><div class="lf-pill" onclick="lfPillRadio(this)">10 sessions</div><div class="lf-pill" onclick="lfPillRadio(this)">20 sessions</div><div class="lf-pill" onclick="lfPillRadio(this)">Ongoing</div></div></div>
+        <div class="lf-field"><label class="lf-label">Starting Progress: <span id="addGoalPctLbl">0%</span></label>
+          <input type="range" class="prog-slider" min="0" max="100" value="0" oninput="document.getElementById('addGoalPctLbl').textContent=this.value+'%'">
+        </div>
+      </div>
+      <!-- Challenge fields -->
+      <div id="gc-challenge-fields" style="display:none;">
+        <div class="lf-field"><label class="lf-label">Challenge Title</label><input class="lf-input" type="text" placeholder="e.g. High backhand volleys lack pace"></div>
+        <div class="lf-field"><label class="lf-label">Describe the pattern</label><textarea class="lf-input" style="height:52px;resize:none;line-height:1.5;" placeholder="When does this show up? What goes wrong?…"></textarea></div>
+        <div class="lf-field"><label class="lf-label">Category</label>
+          <div class="cat-grid">
+            <div class="cat-btn on" onclick="catSel(this)"><div class="cat-ico">🎾</div><div class="cat-lbl">Technique</div></div>
+            <div class="cat-btn" onclick="catSel(this)"><div class="cat-ico">♟️</div><div class="cat-lbl">Strategy</div></div>
+            <div class="cat-btn" onclick="catSel(this)"><div class="cat-ico">🧠</div><div class="cat-lbl">Mental</div></div>
+            <div class="cat-btn" onclick="catSel(this)"><div class="cat-ico">💪</div><div class="cat-lbl">Fitness</div></div>
+          </div>
+        </div>
+        <div style="background:var(--blue-bg);border-radius:var(--r-sm);padding:10px 12px;font-size:11px;font-weight:600;color:var(--blue);margin-bottom:10px;">🤖 AI will generate a tip for this challenge area based on your game history.</div>
+      </div>
+      <button class="save-btn" id="gc-save-btn" onclick="closeOverlay('addGoalOverlay');showToast('🎯 Goal added!')">Add Goal</button>
+    </div>
+  </div>
+
+  <!-- Goal / Challenge EDIT sheet -->
+  <div class="overlay" id="goalEditOverlay">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-hd">
+        <div class="sheet-title" id="geTitle">Edit Goal</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button onclick="openDeleteFromEdit('goal')" style="background:var(--red-bg);color:var(--red);border:none;border-radius:var(--r-sm);padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;">Delete</button>
+          <button class="sheet-close" onclick="closeOverlay('goalEditOverlay')">✕</button>
+        </div>
+      </div>
+      <!-- Read view -->
+      <div id="ge-read-view">
+        <div style="background:var(--g100);border-radius:var(--r-md);padding:14px;margin-bottom:12px;">
+          <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;" id="ge-read-title"></div>
+          <div style="font-size:11px;color:var(--text-lt);font-weight:500;margin-bottom:10px;" id="ge-read-cat"></div>
+          <div class="prog-wrap" style="margin-bottom:6px;"><div class="prog-fill" id="ge-read-bar" style="background:linear-gradient(90deg,var(--g600),var(--g700));"></div></div>
+          <div style="font-size:11px;color:var(--g700);font-weight:700;" id="ge-read-pct"></div>
+        </div>
+        <div style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:16px;" id="ge-read-desc"></div>
+        <button class="save-btn" onclick="geToggleEdit()">✏️ Edit This Goal</button>
+      </div>
+      <!-- Edit view (hidden by default) -->
+      <div id="ge-edit-view" style="display:none;">
+        <div class="lf-field"><label class="lf-label">Title</label><input class="lf-input" type="text" id="ge-edit-title"></div>
+        <div class="lf-field"><label class="lf-label">Description</label><textarea class="lf-input" style="height:60px;resize:none;line-height:1.5;" id="ge-edit-desc"></textarea></div>
+        <div class="lf-field"><label class="lf-label">Category</label>
+          <div class="cat-grid" id="ge-cat-grid">
+            <div class="cat-btn on" onclick="catSel(this)"><div class="cat-ico">🎾</div><div class="cat-lbl">Technique</div></div>
+            <div class="cat-btn" onclick="catSel(this)"><div class="cat-ico">♟️</div><div class="cat-lbl">Strategy</div></div>
+            <div class="cat-btn" onclick="catSel(this)"><div class="cat-ico">🧠</div><div class="cat-lbl">Mental</div></div>
+            <div class="cat-btn" onclick="catSel(this)"><div class="cat-ico">💪</div><div class="cat-lbl">Fitness</div></div>
+          </div>
+        </div>
+        <div class="lf-field"><label class="lf-label">Progress: <span id="ge-edit-pct-lbl">0%</span></label>
+          <input type="range" class="prog-slider" min="0" max="100" value="0" id="ge-edit-slider" oninput="document.getElementById('ge-edit-pct-lbl').textContent=this.value+'%'">
+        </div>
+        <div style="display:flex;gap:9px;">
+          <button class="save-btn" style="flex:1;margin-top:0;" onclick="closeOverlay('goalEditOverlay');showToast('✅ Goal updated!')">Save Changes</button>
+          <button onclick="geToggleEdit()" style="padding:14px 16px;background:var(--surface);border:1.5px solid var(--divider);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--text-lt);cursor:pointer;">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gear ADD sheet -->
+  <div class="overlay" id="addGearOverlay">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-hd"><div class="sheet-title">Add Gear</div><button class="sheet-close" onclick="closeOverlay('addGearOverlay')">✕</button></div>
+      <div class="lf-field"><label class="lf-label">Gear Type</label>
+        <div class="gear-type-grid">
+          <div class="gear-type-btn on" onclick="selectGearType(this,'gf-racket')"><div class="gt-ico">🎾</div><div class="gt-lbl">Racket</div></div>
+          <div class="gear-type-btn" onclick="selectGearType(this,'gf-shoes')"><div class="gt-ico">👟</div><div class="gt-lbl">Shoes</div></div>
+          <div class="gear-type-btn" onclick="selectGearType(this,'gf-acc')"><div class="gt-ico">🎒</div><div class="gt-lbl">Accessory</div></div>
+        </div>
+      </div>
+      <div class="gear-form-section active" id="gf-racket">
+        <div class="lf-field"><label class="lf-label">Brand &amp; Model</label><input class="lf-input" type="text" placeholder="e.g. Wilson Blade 98"></div>
+        <div class="lf-field"><label class="lf-label">Role</label><div class="lf-pills"><div class="lf-pill on" onclick="lfPillRadio(this)">Main</div><div class="lf-pill" onclick="lfPillRadio(this)">Backup</div></div></div>
+        <div class="lf-row">
+          <div class="lf-field"><label class="lf-label">String Tension</label><input class="lf-input" type="text" placeholder="e.g. 54 lbs"></div>
+          <div class="lf-field"><label class="lf-label">Grip Size</label><input class="lf-input" type="text" placeholder="e.g. 4 1/4"></div>
+        </div>
+        <div class="lf-field"><label class="lf-label">Dampener</label><input class="lf-input" type="text" placeholder="e.g. Butterfly, none…"></div>
+        <div class="lf-field"><label class="lf-label">Purchase Date</label><input class="lf-input" type="date"></div>
+      </div>
+      <div class="gear-form-section" id="gf-shoes">
+        <div class="lf-field"><label class="lf-label">Brand &amp; Model</label><input class="lf-input" type="text" placeholder="e.g. Asics Gel Resolution 9"></div>
+        <div class="lf-field"><label class="lf-label">Surface</label><div class="lf-pills"><div class="lf-pill on" onclick="lfPillRadio(this)">Hard</div><div class="lf-pill" onclick="lfPillRadio(this)">Clay</div><div class="lf-pill" onclick="lfPillRadio(this)">Grass</div><div class="lf-pill" onclick="lfPillRadio(this)">Indoor</div></div></div>
+        <div class="lf-row"><div class="lf-field"><label class="lf-label">Size</label><input class="lf-input" type="text" placeholder="e.g. 7.5"></div><div class="lf-field"><label class="lf-label">Color</label><input class="lf-input" type="text" placeholder="e.g. White/Pink"></div></div>
+        <div class="lf-field"><label class="lf-label">Status</label><div class="lf-pills"><div class="lf-pill on" onclick="lfPillRadio(this)">New</div><div class="lf-pill" onclick="lfPillRadio(this)">Breaking in</div><div class="lf-pill" onclick="lfPillRadio(this)">Match ready</div><div class="lf-pill" onclick="lfPillRadio(this)">Worn</div></div></div>
+        <div class="lf-field"><label class="lf-label">Purchase Date</label><input class="lf-input" type="date"></div>
+      </div>
+      <div class="gear-form-section" id="gf-acc">
+        <div class="lf-field"><label class="lf-label">Name</label><input class="lf-input" type="text" placeholder="e.g. Adidas Match Wristbands"></div>
+        <div class="lf-field"><label class="lf-label">Type</label><div class="lf-pills"><div class="lf-pill on" onclick="lfPillRadio(this)">Wristband</div><div class="lf-pill" onclick="lfPillRadio(this)">Bag</div><div class="lf-pill" onclick="lfPillRadio(this)">Hat</div><div class="lf-pill" onclick="lfPillRadio(this)">Grip</div><div class="lf-pill" onclick="lfPillRadio(this)">Other</div></div></div>
+        <div class="lf-field"><label class="lf-label">Details</label><textarea class="lf-input" style="height:52px;resize:none;line-height:1.5;" placeholder="Color, quantity, specs…"></textarea></div>
+        <div class="lf-field"><label class="lf-label">Purchase Date</label><input class="lf-input" type="date"></div>
+      </div>
+      <button class="save-btn" onclick="closeOverlay('addGearOverlay');showToast('🎾 Gear added!')">Save Gear</button>
+    </div>
+  </div>
+
+  <!-- Gear EDIT sheet -->
+  <div class="overlay" id="gearEditOverlay">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-hd">
+        <div class="sheet-title" id="gearEditTitle">Edit Gear</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button onclick="openDeleteFromEdit('gear')" style="background:var(--red-bg);color:var(--red);border:none;border-radius:var(--r-sm);padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;">Delete</button>
+          <button class="sheet-close" onclick="closeOverlay('gearEditOverlay')">✕</button>
+        </div>
+      </div>
+      <!-- Read view -->
+      <div id="gear-read-view">
+        <div style="background:var(--g100);border-radius:var(--r-md);padding:14px;margin-bottom:14px;">
+          <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;" id="gear-read-name"></div>
+          <div style="font-size:11px;color:var(--text-lt);font-weight:500;" id="gear-read-sub"></div>
+        </div>
+        <div id="gear-read-specs" style="margin-bottom:16px;"></div>
+        <button class="save-btn" onclick="gearToggleEdit()">✏️ Edit This Item</button>
+      </div>
+      <!-- Edit view -->
+      <div id="gear-edit-view" style="display:none;">
+        <div class="lf-field"><label class="lf-label">Name / Model</label><input class="lf-input" type="text" id="gear-edit-name"></div>
+        <div id="gear-edit-extra"></div>
+        <div class="lf-field"><label class="lf-label">Purchase Date</label><input class="lf-input" type="date"></div>
+        <div style="display:flex;gap:9px;">
+          <button class="save-btn" style="flex:1;margin-top:0;" onclick="closeOverlay('gearEditOverlay');showToast('✅ Gear updated!')">Save Changes</button>
+          <button onclick="gearToggleEdit()" style="padding:14px 16px;background:var(--surface);border:1.5px solid var(--divider);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--text-lt);cursor:pointer;">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="logOverlay">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-hd"><div class="sheet-title">Log Session</div><button class="sheet-close" onclick="closeOverlay('logOverlay')">✕</button></div>
+      <div class="lf-tabs">
+        <div class="lf-tab on" onclick="switchTab(this,'tab-match')">⚡ Match</div>
+        <div class="lf-tab" onclick="switchTab(this,'tab-lesson')">📚 Lesson</div>
+        <div class="lf-tab" onclick="switchTab(this,'tab-practice')">🎾 Practice</div>
+      </div>
+      <div class="lf-pane on" id="tab-match">
+        <div class="lf-row"><div class="lf-field"><label class="lf-label">Date</label><input class="lf-input" type="date" value="2026-02-27"></div><div class="lf-field"><label class="lf-label">Location</label><input class="lf-input" type="text" placeholder="e.g. Bayshore TC"></div></div>
+        <div class="lf-field"><label class="lf-label">Format</label><div class="lf-pills"><div class="lf-pill on" onclick="lfPillRadio(this)">Doubles</div><div class="lf-pill" onclick="lfPillRadio(this)">Singles</div></div></div>
+        <div class="lf-field"><label class="lf-label">Opponent(s)</label><input class="lf-input" type="text" placeholder="e.g. Karen T. &amp; Sarah M."></div>
+        <div class="lf-field"><label class="lf-label">Score</label>
+          <div class="score-inputs"><div><div class="score-box me">6</div><div style="font-size:9px;text-align:center;color:var(--text-lt);margin-top:2px;">Me</div></div><div class="score-vs">—</div><div><div class="score-box">4</div><div style="font-size:9px;text-align:center;color:var(--text-lt);margin-top:2px;">Opp.</div></div><span style="color:var(--text-lt);font-size:11px;font-weight:600;align-self:center;padding:0 2px;">·</span><div><div class="score-box me">7</div><div style="font-size:9px;text-align:center;color:var(--text-lt);margin-top:2px;">Me</div></div><div class="score-vs">—</div><div><div class="score-box">5</div><div style="font-size:9px;text-align:center;color:var(--text-lt);margin-top:2px;">Opp.</div></div></div>
+          <div class="result-pills"><div class="result-pill win">✓ Win</div><div class="result-pill">Loss</div><div class="result-pill">Split</div></div>
+        </div>
+        <div class="lf-field"><label class="lf-label">Goals Worked On</label>
+          <div class="goal-check-list">
+            <div class="goal-check on" onclick="this.classList.toggle('on');this.querySelector('.check-circle').classList.toggle('on')"><div class="check-circle on">✓</div><div class="goal-check-lbl">Backhand topspin consistency</div></div>
+            <div class="goal-check" onclick="this.classList.toggle('on');this.querySelector('.check-circle').classList.toggle('on')"><div class="check-circle"></div><div class="goal-check-lbl">Second serve confidence</div></div>
+          </div>
+        </div>
+        <div class="lf-field"><label class="lf-label">Rating</label><div class="lf-star-row"><span class="lf-star on" onclick="starRate(this)">⭐</span><span class="lf-star on" onclick="starRate(this)">⭐</span><span class="lf-star on" onclick="starRate(this)">⭐</span><span class="lf-star on" onclick="starRate(this)">⭐</span><span class="lf-star" onclick="starRate(this)">⭐</span></div></div>
+        <div class="lf-field"><label class="lf-label">Notes</label><textarea class="lf-input" style="height:56px;resize:none;line-height:1.5;" placeholder="What worked? What needs work?…"></textarea></div>
+        <button class="save-btn" onclick="closeOverlay('logOverlay');showToast('✅ Match entry saved!')">Save Match Entry</button>
+      </div>
+      <div class="lf-pane" id="tab-lesson">
+        <div class="lf-row"><div class="lf-field"><label class="lf-label">Date</label><input class="lf-input" type="date" value="2026-02-27"></div><div class="lf-field"><label class="lf-label">Duration</label><div class="lf-pills" style="margin-top:5px;"><div class="lf-pill" onclick="lfPillRadio(this)">1 hr</div><div class="lf-pill on" onclick="lfPillRadio(this)">1.5 hrs</div><div class="lf-pill" onclick="lfPillRadio(this)">2 hrs</div></div></div></div>
+        <div class="lf-field"><label class="lf-label">Coach Name</label><input class="lf-input" type="text" value="Coach Danny"></div>
+        <div class="lf-field"><label class="lf-label">Skills Worked On</label><input class="lf-input" type="text" placeholder="e.g. Backhand, return of serve…"></div>
+        <div class="lf-field"><label class="lf-label">Coaching Tips (one per line)</label><textarea class="lf-input" style="height:88px;resize:none;line-height:1.6;" placeholder="e.g. Roll wrist through contact&#10;Finish strokes across body&#10;Exhale on every shot"></textarea></div>
+        <div class="lf-field"><label class="lf-label">Rating</label><div class="lf-star-row"><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span></div></div>
+        <button class="save-btn" onclick="closeOverlay('logOverlay');showToast('✅ Lesson saved! Coach notes updated.')">Save Lesson Entry</button>
+      </div>
+      <div class="lf-pane" id="tab-practice">
+        <div class="lf-row"><div class="lf-field"><label class="lf-label">Date</label><input class="lf-input" type="date" value="2026-02-27"></div><div class="lf-field"><label class="lf-label">Duration</label><input class="lf-input" type="text" placeholder="e.g. 1h 30m"></div></div>
+        <div class="lf-field"><label class="lf-label">Location</label><input class="lf-input" type="text" placeholder="e.g. Bayshore TC"></div>
+        <div class="lf-field"><label class="lf-label">Surface</label><div class="lf-pills"><div class="lf-pill on" onclick="lfPillRadio(this)">Hard</div><div class="lf-pill" onclick="lfPillRadio(this)">Clay</div><div class="lf-pill" onclick="lfPillRadio(this)">Grass</div></div></div>
+        <div class="lf-field"><label class="lf-label">Goals Worked On</label>
+          <div class="goal-check-list">
+            <div class="goal-check on" onclick="this.classList.toggle('on');this.querySelector('.check-circle').classList.toggle('on')"><div class="check-circle on">✓</div><div class="goal-check-lbl">Backhand topspin consistency</div></div>
+            <div class="goal-check" onclick="this.classList.toggle('on');this.querySelector('.check-circle').classList.toggle('on')"><div class="check-circle"></div><div class="goal-check-lbl">Second serve confidence</div></div>
+          </div>
+        </div>
+        <div class="lf-field"><label class="lf-label">Rating</label><div class="lf-star-row"><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span><span class="lf-star on">⭐</span><span class="lf-star">⭐</span></div></div>
+        <div class="lf-field"><label class="lf-label">Notes</label><textarea class="lf-input" style="height:56px;resize:none;line-height:1.5;" placeholder="What clicked? What needs more work?…"></textarea></div>
+        <button class="save-btn" onclick="closeOverlay('logOverlay');showToast('✅ Practice entry saved!')">Save Practice Entry</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="deleteOverlay">
+    <div class="sheet" style="padding-bottom:28px;">
+      <div class="sheet-handle"></div>
+      <div class="del-icon">🗑️</div>
+      <div class="del-title" id="delTitle">Delete this item?</div>
+      <div class="del-sub" id="delSub">This action cannot be undone. The item will be permanently removed from your RallyMind account.</div>
+      <button class="del-confirm-btn" onclick="closeOverlay('deleteOverlay');showToast('🗑️ Deleted.')">Yes, Delete Permanently</button>
+      <button class="del-cancel-btn" onclick="closeOverlay('deleteOverlay')">Cancel — Keep It</button>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+</body>
+</html>
