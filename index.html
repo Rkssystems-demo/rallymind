@@ -31,7 +31,7 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{
   font-family:'DM Sans',sans-serif;
-  background:var(--surface);
+  background:#0d3320;
   margin:0;padding:0;
   width:100vw;height:100dvh;
   overflow:hidden;
@@ -43,8 +43,8 @@ body{
 /* PHONE — fills full screen on mobile */
 .phone{
   width:100%;
-  height:100%;
-  background:var(--surface);
+  height:100dvh;
+  background:#0d3320;
   border-radius:0;
   box-shadow:none;
   overflow:hidden;
@@ -55,7 +55,7 @@ body{
 }
 
 /* Status bar — hidden on mobile (iOS shows its own) */
-.status-bar{display:none;}
+.status-bar{display:none !important;height:0 !important;padding:0 !important;}
 
 /* Nav — sits above iOS home indicator */
 .nav{
@@ -77,34 +77,18 @@ body{
   padding-bottom:max(24px, env(safe-area-inset-bottom));
 }
 
-/* Splash full-screen fix */
+/* Splash full-screen fix — safe area top padding only */
 .splash-wrap{
   padding-top:max(60px, env(safe-area-inset-top, 44px));
   padding-bottom:max(40px, env(safe-area-inset-bottom, 20px));
 }
-#screen-splash {
-  min-height: 100dvh;
-  height: 100%;
-  flex: 1;
-}
 
-/* Onboarding + signin safe area */
-.ob-wrap, .si-wrap{
+/* Onboarding + signin — safe area top padding only */
+.ob-wrap{
   padding-top:max(56px, env(safe-area-inset-top, 44px));
 }
-
-/* Force onboarding and signin screens to fill full height */
-#screen-onboarding,
-#screen-signin {
-  min-height: 100dvh;
-  height: 100%;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-#screen-onboarding.active,
-#screen-signin.active {
-  display: flex;
+.si-wrap{
+  padding-top:max(56px, env(safe-area-inset-top, 44px));
 }
 
 /* Home header top padding */
@@ -117,7 +101,7 @@ body{
   padding-top:max(14px, env(safe-area-inset-top, 0px));
 }
 
-/* SCREENS */
+/* SCREENS — let the base class handle show/hide, never override display here */
 .screen{display:none;flex-direction:column;flex:1;overflow:hidden;min-height:0;}
 .screen.active{display:flex;}
 .scroll{overflow-y:auto;flex:1;}
