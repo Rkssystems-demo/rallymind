@@ -29,24 +29,26 @@
 }
 
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-/* ── MOBILE OVERRIDES — generated from rallymind-prototype-v5.html ── */
-body{font-family:'DM Sans',sans-serif;background:var(--surface);margin:0;padding:0;width:100vw;height:100dvh;overflow:hidden;display:flex;flex-direction:column;}
-.meta-label{display:none;}
-.phone{width:100%;height:100dvh;background:var(--surface);border-radius:0;box-shadow:none;overflow:hidden;position:relative;display:flex;flex-direction:column;flex:1;}
-.status-bar{display:none !important;height:0 !important;padding:0 !important;}
-.splash-wrap{padding-top:max(60px,env(safe-area-inset-top,44px));padding-bottom:max(40px,env(safe-area-inset-bottom,20px));}
-.home-hd{padding-top:max(16px,env(safe-area-inset-top,0px));}
-.page-hd{padding-top:max(14px,env(safe-area-inset-top,0px));}
-.nav{padding:8px 0;padding-bottom:max(20px,env(safe-area-inset-bottom));}
-.sheet{max-height:calc(92dvh - env(safe-area-inset-bottom));height:calc(92dvh - env(safe-area-inset-bottom));}
-#screen-onboarding .ob-wrap,#screen-signin .si-wrap{flex:1;min-height:0;padding-top:max(56px,env(safe-area-inset-top,44px));}
-.nav-btn{padding:6px 0;}
-.nav-ico{font-size:24px;}
-.nav-lbl{font-size:10px;}
-.fab{width:44px;height:44px;font-size:22px;}
-.pill{padding:8px 16px;font-size:11px;}
-.sheet-close{width:32px;height:32px;font-size:16px;}
-.screen{display:none;flex-direction:column;flex:1;overflow:hidden;min-height:0;}
+body{
+  font-family:'DM Sans',sans-serif;background:#98adbf;
+  display:flex;flex-direction:column;align-items:center;
+  min-height:100vh;padding:28px 12px 60px;gap:12px;
+}
+.meta-label{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55);}
+
+/* PHONE */
+.phone{
+  width:390px;height:844px;background:var(--surface);border-radius:48px;
+  box-shadow:0 40px 90px rgba(0,0,0,0.45),0 0 0 10px #1c1c1e,0 0 0 12px #3a3a3c;
+  overflow:hidden;position:relative;display:flex;flex-direction:column;
+}
+.status-bar{background:var(--g800);padding:14px 26px 9px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.sb-time{font-size:13px;font-weight:700;color:white;}
+.sb-brand{font-size:14px;font-weight:700;color:rgba(255,255,255,0.85);letter-spacing:0.06em;}
+.sb-icons{font-size:11px;color:rgba(255,255,255,0.7);display:flex;gap:4px;align-items:center;}
+
+/* SCREENS */
+.screen{display:none;flex-direction:column;flex:1;overflow:hidden;}
 .screen.active{display:flex;}
 .scroll{overflow-y:auto;flex:1;}
 .scroll::-webkit-scrollbar{display:none;}
@@ -397,6 +399,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--surface);margin:0;padding
 .save-btn{width:100%;margin-top:14px;padding:15px;background:linear-gradient(135deg,var(--g700),var(--g800));color:white;border:none;border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(42,122,75,0.3);transition:all 0.18s;}
 .save-btn:active{transform:scale(0.98);}
 
+/* Journal entry detail overlay */
+.jd-type-badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;}
+.jd-type-match{background:var(--g100);color:var(--g700);}
+.jd-type-lesson{background:var(--blue-bg);color:var(--blue);}
+.jd-type-practice{background:var(--surface);color:var(--text-lt);border:1.5px solid var(--divider);}
+.jd-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.jd-sub{font-size:11px;font-weight:500;color:var(--text-lt);margin-bottom:14px;}
+.jd-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--divider);font-size:13px;}
+.jd-row:last-of-type{border-bottom:none;}
+.jd-lbl{font-weight:700;color:var(--text-lt);font-size:11px;text-transform:uppercase;letter-spacing:0.07em;}
+.jd-val{font-weight:600;color:var(--text);font-size:13px;text-align:right;}
+.jd-notes{background:var(--surface);border-radius:var(--r-sm);padding:12px;font-size:13px;font-weight:500;color:var(--text);line-height:1.6;margin-top:10px;}
+.jd-action-row{display:flex;gap:9px;margin-top:14px;}
+.jd-edit-btn{flex:1;padding:13px;background:var(--g100);color:var(--g700);border:1.5px solid var(--g700);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+.jd-del-btn{padding:13px 16px;background:var(--red-bg);color:var(--red);border:1.5px solid var(--red);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+
 /* PROFILE PANEL */
 .prof-overlay{display:none;position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:400;flex-direction:column;justify-content:flex-start;}
 .prof-overlay.open{display:flex;}
@@ -577,6 +595,25 @@ body{font-family:'DM Sans',sans-serif;background:var(--surface);margin:0;padding
 .result-pill{flex:1;padding:8px;border-radius:var(--r-sm);text-align:center;font-size:11px;font-weight:700;border:1.5px solid var(--divider);background:var(--surface);color:var(--text-lt);cursor:pointer;transition:all 0.15s;}
 .result-pill.win{background:var(--g100);border-color:var(--g700);color:var(--g700);}
 .result-pill.loss{background:var(--orange-bg);border-color:var(--orange);color:var(--orange);}
+
+/* ── MOBILE OVERRIDES — generated from rallymind-prototype-v5.html ── */
+body{font-family:'DM Sans',sans-serif;background:var(--surface);margin:0;padding:0;width:100vw;height:100dvh;overflow:hidden;display:flex;flex-direction:column;}
+.meta-label{display:none;}
+.phone{width:100%;height:100dvh;background:var(--surface);border-radius:0;box-shadow:none;overflow:hidden;position:relative;display:flex;flex-direction:column;flex:1;}
+.status-bar{display:none !important;height:0 !important;padding:0 !important;}
+.splash-wrap{padding-top:max(60px,env(safe-area-inset-top,44px));padding-bottom:max(40px,env(safe-area-inset-bottom,20px));}
+.home-hd{padding-top:max(16px,env(safe-area-inset-top,0px));}
+.page-hd{padding-top:max(14px,env(safe-area-inset-top,0px));}
+.nav{padding:8px 0;padding-bottom:max(20px,env(safe-area-inset-bottom));}
+.sheet{max-height:calc(92dvh - env(safe-area-inset-bottom));height:calc(92dvh - env(safe-area-inset-bottom));}
+#screen-onboarding .ob-wrap,#screen-signin .si-wrap{flex:1;min-height:0;padding-top:max(56px,env(safe-area-inset-top,44px));}
+.nav-btn{padding:6px 0;}
+.nav-ico{font-size:24px;}
+.nav-lbl{font-size:10px;}
+.fab{width:44px;height:44px;font-size:22px;}
+.pill{padding:8px 16px;font-size:11px;}
+.sheet-close{width:32px;height:32px;font-size:16px;}
+.screen{display:none;flex-direction:column;flex:1;overflow:hidden;min-height:0;}
 </style>
 </head>
 <body>
@@ -585,7 +622,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--surface);margin:0;padding
 
 <div class="phone">
   <div class="status-bar">
-    <span class="sb-time" id="liveTime">9:41</span>
+    <span class="sb-time">9:41</span>
     <span class="sb-brand">RALLYMIND</span>
     <div class="sb-icons"><span>●●●</span><span>WiFi</span><span>🔋</span></div>
   </div>
@@ -732,7 +769,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--surface);margin:0;padding
         </div>
       </div>
       <div class="journal-item" data-type="match">
-        <div class="j-entry m" onclick="openScoutModal('karen')">
+        <div class="j-entry m" onclick="openJournalDetail('match1')">
           <div class="je-top"><span class="tag tag-match">Match</span><span class="je-date">Feb 22, 2026</span></div>
           <div class="je-title">vs. Karen T. &amp; Sarah M.</div>
           <div class="je-meta">Bayshore TC · Doubles · Hard Court · League · 1h 45m</div>
@@ -740,7 +777,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--surface);margin:0;padding
         </div>
       </div>
       <div class="journal-item" data-type="lesson">
-        <div class="j-entry l" onclick="showToast('📋 Lesson detail — tap to edit coming soon!')">
+        <div class="j-entry l" onclick="openJournalDetail('lesson1')">
           <div class="je-top"><span class="tag tag-lesson">Lesson</span><span class="je-date">Feb 18, 2026</span></div>
           <div class="je-title">Lesson with Coach Danny</div>
           <div class="je-meta">1h 30m · Backhand approach, return of serve, serve toss</div>
@@ -748,7 +785,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--surface);margin:0;padding
         </div>
       </div>
       <div class="journal-item" data-type="practice">
-        <div class="j-entry" onclick="showToast('📋 Practice detail — tap to edit coming soon!')">
+        <div class="j-entry" onclick="openJournalDetail('practice1')">
           <div class="je-top"><span class="tag tag-practice">Practice</span><span class="je-date">Feb 15, 2026</span></div>
           <div class="je-title">Baseline Drills · Singles</div>
           <div class="je-meta">2h · Bayshore TC · Hard Court</div>
@@ -756,7 +793,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--surface);margin:0;padding
         </div>
       </div>
       <div class="journal-item" data-type="match">
-        <div class="j-entry m" onclick="showToast('📋 Entry detail — tap to edit coming soon!')">
+        <div class="j-entry m" onclick="openJournalDetail('match2')">
           <div class="je-top"><span class="tag tag-match">Match</span><span class="je-date">Feb 10, 2026</span></div>
           <div class="je-title">vs. Michelle K. &amp; Tanya R.</div>
           <div class="je-meta">Bayshore TC · Doubles · Hard Court · League · 1h 55m</div>
@@ -1188,9 +1225,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--surface);margin:0;padding
 
         <!-- MATCH TAB -->
         <div class="lf-pane on" id="tab-match">
+          <!-- Scheduled / Played toggle — all fields shown in both modes -->
+          <div class="lf-field">
+            <div style="display:flex;border:1.5px solid var(--divider);border-radius:var(--r-sm);overflow:hidden;">
+              <div id="mst-played" style="flex:1;padding:10px;text-align:center;font-size:12px;font-weight:700;background:var(--g700);color:white;cursor:pointer;transition:background 0.15s,color 0.15s;" onclick="setMatchStatus('played')">&#9889; Played</div>
+              <div id="mst-scheduled" style="flex:1;padding:10px;text-align:center;font-size:12px;font-weight:700;background:var(--surface);color:var(--text-lt);cursor:pointer;transition:background 0.15s,color 0.15s;" onclick="setMatchStatus('scheduled')">&#128197; Scheduled</div>
+            </div>
+          </div>
           <div class="lf-row">
-            <div class="lf-field"><label class="lf-label">Date</label><input class="lf-input" type="date" value="2026-02-27"></div>
-            <div class="lf-field"><label class="lf-label">Location</label><input class="lf-input" type="text" placeholder="e.g. Bayshore TC"></div>
+            <div class="lf-field"><label class="lf-label">Date</label><input class="lf-input" type="date" id="matchDate" value="2026-03-03"></div>
+            <div class="lf-field"><label class="lf-label">Time</label><input class="lf-input" type="time" id="matchTime" value=""></div>
           </div>
           <div class="lf-field"><label class="lf-label">Format</label>
             <div class="lf-pills"><div class="lf-pill on" onclick="lfPillRadio(this)">Doubles</div><div class="lf-pill" onclick="lfPillRadio(this)">Singles</div></div>
@@ -1198,8 +1242,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--surface);margin:0;padding
           <div class="lf-field"><label class="lf-label">Surface</label>
             <div class="lf-pills"><div class="lf-pill on" onclick="lfPillRadio(this)">Hard</div><div class="lf-pill" onclick="lfPillRadio(this)">Clay</div><div class="lf-pill" onclick="lfPillRadio(this)">Grass</div><div class="lf-pill" onclick="lfPillRadio(this)">Indoor</div></div>
           </div>
-          <div class="lf-field"><label class="lf-label">Opponent Name(s)</label><input class="lf-input" type="text" id="opponentInput" placeholder="e.g. Karen T. &amp; Sarah M."></div>
-          <div class="lf-field"><label class="lf-label">League / Tournament</label><input class="lf-input" type="text" placeholder="e.g. USTA Adult 4.0"></div>
+          <div class="lf-field"><label class="lf-label">Opponent Name(s)</label><input class="lf-input" type="text" id="matchOpponent" placeholder="e.g. Karen T. &amp; Sarah M."></div>
+          <div class="lf-field"><label class="lf-label">Partner</label><input class="lf-input" type="text" id="matchPartner" placeholder="e.g. Jess T."></div>
+          <div class="lf-field"><label class="lf-label">Location</label><input class="lf-input" type="text" id="matchLocation" placeholder="e.g. Bayshore TC"></div>
+          <div class="lf-field"><label class="lf-label">League / Tournament</label><input class="lf-input" type="text" id="matchLeague" placeholder="e.g. USTA Adult 4.0"></div>
           <div class="lf-field"><label class="lf-label">Score</label>
             <div class="score-inputs">
               <div><div class="score-box me">6</div><div style="font-size:9px;text-align:center;color:var(--text-lt);margin-top:2px;">Me</div></div>
@@ -1226,7 +1272,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--surface);margin:0;padding
           <div class="lf-field"><label class="lf-label">What Worked</label><textarea class="lf-input" style="height:54px;resize:none;line-height:1.5;" placeholder="e.g. Backhand felt great today…"></textarea></div>
           <div class="lf-field"><label class="lf-label">Challenges</label><textarea class="lf-input" style="height:54px;resize:none;line-height:1.5;" placeholder="e.g. Second serve nerves…"></textarea></div>
           <div class="lf-field"><label class="lf-label">Notes</label><textarea class="lf-input" style="height:54px;resize:none;line-height:1.5;" placeholder="Anything else to remember…"></textarea></div>
-          <button class="save-btn" onclick="closeOverlay('logOverlay');showToast('✅ Match entry saved!')">Save Match Entry</button>
+          <button class="save-btn" id="matchSaveBtn" onclick="saveMatchEntry()">Save Match Entry</button>
         </div>
 
         <!-- LESSON TAB -->
@@ -1256,6 +1302,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--surface);margin:0;padding
             <div class="lf-field"><label class="lf-label">Date</label><input class="lf-input" type="date" value="2026-02-27"></div>
             <div class="lf-field"><label class="lf-label">Duration</label><input class="lf-input" type="text" placeholder="e.g. 1h 30m"></div>
           </div>
+          <div class="lf-field"><label class="lf-label">Other Players</label><input class="lf-input" type="text" placeholder="e.g. Jess T., Mara K."></div>
           <div class="lf-field"><label class="lf-label">Location</label><input class="lf-input" type="text" placeholder="e.g. Bayshore TC"></div>
           <div class="lf-field"><label class="lf-label">Surface</label>
             <div class="lf-pills"><div class="lf-pill on" onclick="lfPillRadio(this)">Hard</div><div class="lf-pill" onclick="lfPillRadio(this)">Clay</div><div class="lf-pill" onclick="lfPillRadio(this)">Grass</div><div class="lf-pill" onclick="lfPillRadio(this)">Indoor</div></div>
@@ -1683,9 +1730,157 @@ function openScoutModal(key) {
       <div><div class="sb-blabel" style="color:var(--blue);">AI Game Plan</div><div class="sb-btext">${d.gameplan}</div></div>
     </div>
     <button class="sheet-cta" onclick="closeOverlay('scoutOverlay')">Got it — I'm ready ✓</button>
+    <button onclick="openScoutEdit('${key}')" style="width:100%;margin-top:8px;padding:13px;background:var(--surface);border:1.5px solid var(--divider);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--text-lt);cursor:pointer;">✏️ Edit Opponent</button>
     </div>
   `;
   document.getElementById('scoutOverlay').classList.add('open');
+}
+
+function openScoutEdit(key) {
+  const d = scoutData[key]; if (!d) return;
+  closeOverlay('scoutOverlay');
+  document.getElementById('scoutEditTitle').textContent = 'Edit — ' + d.name;
+  document.getElementById('se-name').value = d.name;
+  // Put strengths and weaknesses narrative into notes field
+  document.getElementById('se-notes').value = d.strengths + '\n\n' + d.weaknesses;
+
+  // Pre-fill hand pills
+  document.querySelectorAll('#scoutEditOverlay .lf-pill').forEach(p => {
+    p.classList.remove('on');
+    if (d.hand === 'left' && p.textContent.includes('Lefty')) p.classList.add('on');
+    if (d.hand === 'right' && p.textContent.includes('Righty')) p.classList.add('on');
+  });
+
+  // Pre-select tags that match this opponent's tag list
+  const tagNames = d.tags.map(t => t.t);
+  document.querySelectorAll('#scoutEditOverlay .tag-sel').forEach(el => {
+    el.classList.toggle('on', tagNames.includes(el.textContent.trim()));
+  });
+
+  document.getElementById('scoutEditOverlay').classList.add('open');
+}
+
+/* ── JOURNAL DETAIL ──────────────────── */
+const journalData = {
+  match1: {
+    type:'match', typeCls:'jd-type-match', typeLabel:'Match',
+    title:'vs. Karen T. & Sarah M.', date:'Feb 22, 2026',
+    rows:[
+      {l:'Result', v:'🏆 Win 6–4, 7–5'},{l:'Location', v:'Bayshore TC · Court 2'},
+      {l:'Surface', v:'Hard Court (outdoor)'},{l:'Format', v:'Doubles · USTA League 4.0'},
+      {l:'Duration', v:'1h 45m'},{l:'Partner', v:'Jess T.'},
+    ],
+    notes:'Great serving day. Karen struggled with my topspin to her backhand. Need to work on staying calm during deuce points — nerves crept in on the second set.',
+    stars:'⭐⭐⭐⭐⭐'
+  },
+  match2: {
+    type:'match', typeCls:'jd-type-match', typeLabel:'Match',
+    title:'vs. Michelle K. & Tanya R.', date:'Feb 10, 2026',
+    rows:[
+      {l:'Result', v:'❌ Loss 4–6, 5–7'},{l:'Location', v:'Bayshore TC · Court 1'},
+      {l:'Surface', v:'Hard Court (outdoor)'},{l:'Format', v:'Doubles · USTA League 4.0'},
+      {l:'Duration', v:'1h 55m'},{l:'Partner', v:'Mara K.'},
+    ],
+    notes:"Michelle's big serve was a problem in the second set. Kept going to Tanya's backhand — wrong call. Need to communicate more with partner between points.",
+    stars:'⭐⭐⭐'
+  },
+  lesson1: {
+    type:'lesson', typeCls:'jd-type-lesson', typeLabel:'Lesson',
+    title:'Lesson with Coach Danny', date:'Feb 18, 2026',
+    rows:[
+      {l:'Duration', v:'1h 30m'},{l:'Location', v:'Bayshore TC · Court 4'},
+      {l:'Surface', v:'Hard Court (indoor)'},{l:'Coach', v:'Danny R.'},
+      {l:'Skills Worked', v:'Backhand approach, return of serve, serve toss'},
+    ],
+    notes:"Coach flagged my toss is drifting left on the ad side. Drill: 50 serves on toss position. Backhand approach down the line felt much cleaner by end of session.",
+    stars:'⭐⭐⭐⭐⭐'
+  },
+  practice1: {
+    type:'practice', typeCls:'jd-type-practice', typeLabel:'Practice',
+    title:'Baseline Drills · Singles', date:'Feb 15, 2026',
+    rows:[
+      {l:'Duration', v:'2h'},{l:'Location', v:'Bayshore TC · Court 3'},
+      {l:'Surface', v:'Hard Court (outdoor)'},{l:'Other Players', v:'Jess T.'},
+      {l:'Goals Worked On', v:'Backhand topspin consistency'},
+    ],
+    notes:'Focused on deep cross-court backhands. Felt consistent after the first 30 minutes. Need to recover faster after being pushed wide.',
+    stars:'⭐⭐⭐⭐'
+  }
+};
+
+function openJournalDetail(key) {
+  const d = journalData[key]; if (!d) return;
+  document.getElementById('jdTitle').textContent = d.typeLabel + ' · ' + d.date;
+  const rowsHtml = d.rows.map(r=>`<div class="jd-row"><span class="jd-lbl">${r.l}</span><span class="jd-val">${r.v}</span></div>`).join('');
+  document.getElementById('jdBody').innerHTML = `
+    <span class="jd-type-badge ${d.typeCls}">${d.typeLabel}</span>
+    <div class="jd-title">${d.title}</div>
+    <div class="jd-sub">${d.date}</div>
+    ${rowsHtml}
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-lt);margin-top:14px;margin-bottom:6px;">Notes</div>
+    <div class="jd-notes">${d.notes}</div>
+    <div style="margin-top:8px;font-size:16px;">${d.stars}</div>
+    <div class="jd-action-row">
+      <button class="jd-edit-btn" onclick="closeOverlay('journalDetailOverlay');openJournalEdit('${key}')">✏️ Edit Entry</button>
+      <button class="jd-del-btn" onclick="closeOverlay('journalDetailOverlay');openDeleteConfirm('entry','this journal entry')">🗑️</button>
+    </div>
+  `;
+  document.getElementById('journalDetailOverlay').classList.add('open');
+}
+
+function openJournalEdit(key) {
+  const d = journalData[key]; if (!d) return;
+  document.getElementById('jeTitle').textContent = 'Edit ' + d.typeLabel;
+  const r = {}; d.rows.forEach(x => r[x.l] = x.v);
+  let fields = '';
+
+  if (d.type === 'match') {
+    fields = `
+      <div class="lf-field"><label class="lf-label">Date</label><input class="lf-input" type="text" value="${d.date}"></div>
+      <div class="lf-field"><label class="lf-label">Opponent(s)</label><input class="lf-input" type="text" value="${d.title.replace('vs. ','')}"></div>
+      <div class="lf-field"><label class="lf-label">Partner</label><input class="lf-input" type="text" value="${r['Partner']||''}"></div>
+      <div class="lf-field"><label class="lf-label">Location</label><input class="lf-input" type="text" value="${(r['Location']||'').replace(/&amp;/g,'&')}"></div>
+      <div class="lf-field"><label class="lf-label">Duration</label><input class="lf-input" type="text" value="${r['Duration']||''}"></div>
+      <div class="lf-field"><label class="lf-label">Score</label><input class="lf-input" type="text" value="${r['Result']?r['Result'].replace(/[🏆❌]\s*/,''):''}"></div>
+      <div class="lf-field"><label class="lf-label">Result</label><div style="display:flex;gap:8px;">
+        <div class="result-pill ${r['Result']&&r['Result'].includes('Win')?'win':''}" onclick="this.parentElement.querySelectorAll('.result-pill').forEach(p=>p.classList.remove('win','loss'));this.classList.add('win')">Win</div>
+        <div class="result-pill ${r['Result']&&r['Result'].includes('Loss')?'loss':''}" onclick="this.parentElement.querySelectorAll('.result-pill').forEach(p=>p.classList.remove('win','loss'));this.classList.add('loss')">Loss</div>
+      </div></div>`;
+  } else if (d.type === 'lesson') {
+    fields = `
+      <div class="lf-field"><label class="lf-label">Date</label><input class="lf-input" type="text" value="${d.date}"></div>
+      <div class="lf-field"><label class="lf-label">Coach</label><input class="lf-input" type="text" value="${r['Coach']||''}"></div>
+      <div class="lf-field"><label class="lf-label">Location</label><input class="lf-input" type="text" value="${r['Location']||''}"></div>
+      <div class="lf-field"><label class="lf-label">Duration</label><input class="lf-input" type="text" value="${r['Duration']||''}"></div>
+      <div class="lf-field"><label class="lf-label">Skills Worked On</label><input class="lf-input" type="text" value="${r['Skills Worked']||''}"></div>`;
+  } else if (d.type === 'practice') {
+    fields = `
+      <div class="lf-field"><label class="lf-label">Date</label><input class="lf-input" type="text" value="${d.date}"></div>
+      <div class="lf-field"><label class="lf-label">Other Players</label><input class="lf-input" type="text" value="${r['Other Players']||''}"></div>
+      <div class="lf-field"><label class="lf-label">Location</label><input class="lf-input" type="text" value="${r['Location']||''}"></div>
+      <div class="lf-field"><label class="lf-label">Duration</label><input class="lf-input" type="text" value="${r['Duration']||''}"></div>
+      <div class="lf-field"><label class="lf-label">Surface</label><div class="lf-pills">
+        <div class="lf-pill ${r['Surface']&&r['Surface'].includes('Hard')?'on':''}" onclick="lfPillRadio(this)">Hard</div>
+        <div class="lf-pill ${r['Surface']&&r['Surface'].includes('Clay')?'on':''}" onclick="lfPillRadio(this)">Clay</div>
+        <div class="lf-pill ${r['Surface']&&r['Surface'].includes('Grass')?'on':''}" onclick="lfPillRadio(this)">Grass</div>
+        <div class="lf-pill ${r['Surface']&&r['Surface'].includes('Indoor')?'on':''}" onclick="lfPillRadio(this)">Indoor</div>
+      </div></div>`;
+  }
+
+  const starCount = (d.stars.match(/⭐/g)||[]).length;
+  const starsHtml = [1,2,3,4,5].map(n=>`<span class="lf-star ${n<=starCount?'on':''}" onclick="starRate(this)">⭐</span>`).join('');
+
+  document.getElementById('jeBody').innerHTML = `
+    ${fields}
+    <div class="lf-field"><label class="lf-label">Notes</label>
+      <textarea class="lf-input" style="height:72px;resize:none;line-height:1.5;">${d.notes}</textarea>
+    </div>
+    <div class="lf-field"><label class="lf-label">Rating</label>
+      <div class="lf-star-row">${starsHtml}</div>
+    </div>
+    <button class="save-btn" onclick="closeOverlay('journalEditOverlay');showToast('✅ Entry updated!')">Save Changes</button>
+  `;
+  document.getElementById('journalEditOverlay').classList.add('open');
 }
 
 /* ── PROFILE ─────────────────────────── */
@@ -1730,7 +1925,119 @@ function obSeg(el) {
 function openScheduledDetail() { document.getElementById('scheduledOverlay').classList.add('open'); }
 function openAddGoal()  { document.getElementById('addGoalOverlay').classList.add('open'); }
 function openAddGear()  { document.getElementById('addGearOverlay').classList.add('open'); }
-function openLogSheet() { document.getElementById('logOverlay').classList.add('open'); }
+function openLogSheet() {
+  document.getElementById('logOverlay').classList.add('open');
+  // Reset save button to default (in case it was swapped by openEditScheduledMatch)
+  var sv = document.getElementById('matchSaveBtn');
+  if (sv) { sv.textContent = 'Save Match Entry'; sv.onclick = saveMatchEntry; }
+  setMatchStatus('played');
+}
+
+/* ── MATCH STATUS: SCHEDULED vs. PLAYED ─────────────────────────────────────
+   DATA MODEL (single matches table, one `status` field):
+   · status='scheduled' → gold Scheduled banner at the top of Journal.
+     "Edit or Mark as Played" opens the full edit sheet pre-filled with
+     existing data. User can change any field and/or flip the toggle to Played
+     (or leave as Scheduled), then Save. Journal item re-renders accordingly.
+   · status='played' → green Match card in the journal list.
+   · All fields are always shown regardless of status — fill in what you know
+     now, leave the rest blank, and update at any time. The toggle at the top
+     of the Match tab simply records the intended status of the record.
+──────────────────────────────────────────────────────────────────────────── */
+var currentMatchStatus = 'played';
+
+function setMatchStatus(status) {
+  currentMatchStatus = status;
+  var pBtn = document.getElementById('mst-played');
+  var sBtn = document.getElementById('mst-scheduled');
+  var sv   = document.getElementById('matchSaveBtn');
+  if (!pBtn) return;
+  if (status === 'scheduled') {
+    sBtn.style.background = '#d97706';        sBtn.style.color = 'white';
+    pBtn.style.background = 'var(--surface)'; pBtn.style.color = 'var(--text-lt)';
+    if (sv) sv.textContent = 'Save Scheduled Match';
+  } else {
+    pBtn.style.background = 'var(--g700)';    pBtn.style.color = 'white';
+    sBtn.style.background = 'var(--surface)'; sBtn.style.color = 'var(--text-lt)';
+    if (sv) sv.textContent = 'Save Match Entry';
+  }
+}
+
+function saveMatchEntry() {
+  var opp    = (document.getElementById('matchOpponent') ? document.getElementById('matchOpponent').value.trim() : '') || 'Opponent';
+  var loc    = (document.getElementById('matchLocation')  ? document.getElementById('matchLocation').value.trim()  : '') || 'TBD';
+  var dv     = document.getElementById('matchDate') ? document.getElementById('matchDate').value : '';
+  var tv     = document.getElementById('matchTime') ? document.getElementById('matchTime').value : '';
+  var scroll  = document.getElementById('journalScroll');
+  var addMore = scroll.querySelector('.dash-add');
+  var dobj   = dv ? new Date(dv + 'T12:00:00') : new Date();
+  var disp   = dobj.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+  var timeStr = '';
+  if (tv) {
+    var tp = tv.split(':'); var hr = parseInt(tp[0]); var mm = tp[1];
+    timeStr = ' &middot; ' + ((hr % 12) || 12) + ':' + mm + ' ' + (hr >= 12 ? 'PM' : 'AM');
+  }
+  var winPill  = document.querySelector('#tab-match .result-pill.win');
+  var lossPill = document.querySelector('#tab-match .result-pill.loss');
+  var result   = winPill ? 'Win' : (lossPill ? 'Loss' : '');
+  var sc       = result === 'Loss' ? ' l' : '';
+  var el = document.createElement('div');
+  el.className = 'journal-item';
+  if (currentMatchStatus === 'scheduled') {
+    el.setAttribute('data-type', 'scheduled');
+    el.innerHTML = '<div class="scheduled-bar" onclick="openScheduledDetail()"><div class="sb-ico">&#128197;</div><div><div class="sb-eyebrow">Scheduled &middot; ' + disp + '</div><div class="sb-title">vs. ' + opp + '</div><div class="sb-sub">' + loc + ' &middot; Doubles &middot; Hard Court' + timeStr + '</div></div><div class="sb-arrow">&#8250;</div></div>';
+    scroll.insertBefore(el, scroll.firstChild);
+    closeOverlay('logOverlay'); showToast('&#128197; Scheduled match saved!');
+  } else {
+    var scoreTxt = result || 'Played';
+    el.setAttribute('data-type', 'match');
+    el.innerHTML = '<div class="j-entry m" onclick="showToast(\'Match detail\')"><div class="je-top"><span class="tag tag-match">Match</span><span class="je-date">' + disp + '</span></div><div class="je-title">vs. ' + opp + '</div><div class="je-meta">' + loc + ' &middot; Doubles &middot; Hard Court</div><div class="je-bottom"><div class="stars">&#11088;&#11088;&#11088;&#11088;</div><div class="je-score' + sc + '">' + scoreTxt + '</div></div></div>';
+    var firstMatch = scroll.querySelector('[data-type="match"]');
+    scroll.insertBefore(el, firstMatch || addMore);
+    closeOverlay('logOverlay'); showToast('&#9989; Match entry saved!');
+  }
+}
+
+// "Edit or Mark as Played" — opens the Log sheet pre-filled with existing
+// scheduled match data. Save button is swapped to "Update Match" which closes
+// and toasts (prototype stand-in for updating the record in-place).
+function openEditScheduledMatch() {
+  var si = document.querySelector('#journalScroll [data-type="scheduled"]');
+  closeOverlay('scheduledOverlay');
+  openLogSheet();
+  setTimeout(function() {
+    setMatchStatus('scheduled');
+    // Pre-fill fields from the scheduled banner
+    if (si) {
+      var titleEl = si.querySelector('.sb-title');
+      var subEl   = si.querySelector('.sb-sub');
+      var oppIn   = document.getElementById('matchOpponent');
+      var locIn   = document.getElementById('matchLocation');
+      var timeIn  = document.getElementById('matchTime');
+      if (oppIn && titleEl) oppIn.value = titleEl.textContent.replace('vs. ', '');
+      if (subEl) {
+        var parts = subEl.textContent.split('\u00b7').map(function(s){return s.trim();});
+        if (locIn && parts[0]) locIn.value = parts[0];
+        var last = parts[parts.length - 1] || '';
+        var tm = last.match(/(\d+:\d+)\s([AP]M)/);
+        if (tm && timeIn) {
+          var h24 = parseInt(tm[1].split(':')[0]);
+          var mn  = tm[1].split(':')[1];
+          if (tm[2] === 'PM' && h24 !== 12) h24 += 12;
+          if (tm[2] === 'AM' && h24 === 12) h24 = 0;
+          timeIn.value = String(h24).padStart(2, '0') + ':' + mn;
+        }
+      }
+    }
+    // Swap save button to "Update Match" — closes & toasts rather than inserting a new record
+    var sv = document.getElementById('matchSaveBtn');
+    if (sv) {
+      sv.textContent = 'Update Match';
+      sv.onclick = function() { closeOverlay('logOverlay'); showToast('\u2705 Match updated!'); };
+    }
+  }, 60);
+  showToast('\u270f\ufe0f Edit details \u2014 flip to Played when ready');
+}
 
 function openDeleteConfirm(type, name) {
   document.getElementById('delTitle').textContent = 'Delete ' + type + '?';
@@ -1762,10 +2069,6 @@ function starRate(el) {
 /* ── GOALS: add fab wiring ───────────── */
 function openGoalFab() { openAddGoal(); }
 function openGearFab() { openAddGear(); }
-
-/* ── REAL TIME CLOCK ─────────────────── */
-function updateClock(){const el=document.getElementById('liveTime');if(!el)return;const now=new Date();let h=now.getHours(),m=now.getMinutes();const ap=h>=12?'PM':'AM';h=h%12||12;el.textContent=h+':'+String(m).padStart(2,'0')+' '+ap;}
-updateClock();setInterval(updateClock,10000);
 
 /* ── GOAL / CHALLENGE ADD — type toggle ── */
 function gcToggleType(type) {
@@ -1908,7 +2211,7 @@ function openDeleteFromEdit(context) {
         <div class="ob-field"><label>Dominant Hand</label><div class="ob-segs"><div class="ob-seg" onclick="obSeg(this)">🤚 Left-handed</div><div class="ob-seg on" onclick="obSeg(this)">✋ Right-handed</div></div></div>
         <div class="ob-field"><label>Play Style</label><div class="ob-segs"><div class="ob-seg" onclick="obSeg(this)">Baseline</div><div class="ob-seg on" onclick="obSeg(this)">All-Court</div><div class="ob-seg" onclick="obSeg(this)">Net Player</div></div></div>
         <div class="ob-field"><label>I usually play</label><div class="ob-segs"><div class="ob-seg" onclick="obSeg(this)">Singles</div><div class="ob-seg on" onclick="obSeg(this)">Doubles</div><div class="ob-seg" onclick="obSeg(this)">Both</div></div></div>
-        <div class="ob-field"><label>Preferred Doubles Side</label><div class="ob-segs"><div class="ob-seg on" onclick="obSeg(this)">Deuce Court</div><div class="ob-seg" onclick="obSeg(this)">Ad Court</div><div class="ob-seg" onclick="obSeg(this)">Both</div></div></div>
+        <div class="ob-field"><label>Preferred Doubles Side</label><div class="ob-segs"><div class="ob-seg on" onclick="obSeg(this)">Ad Court</div><div class="ob-seg" onclick="obSeg(this)">Deuce Court</div><div class="ob-seg" onclick="obSeg(this)">Both</div></div></div>
         <div class="ob-spacer"></div>
         <div class="ob-actions"><button class="ob-next" onclick="obNext(2)">Continue →</button><button class="ob-skip" onclick="obNext(2)">Skip for now</button></div>
       </div>
@@ -1979,8 +2282,8 @@ function openDeleteFromEdit(context) {
           <div class="prep-txt">Lisa M. has a strong first serve and aggressive net presence. Dana R. is consistent but loses pace under pressure. Plan: Return deep cross-court to Lisa, attack Dana's backhand with topspin, lob early to expose the overhead. Stay aggressive — don't let them settle.</div>
         </div>
         <div class="match-action-row">
-          <button class="save-btn" style="flex:1;margin-top:0;" onclick="closeOverlay('scheduledOverlay');openLogSheet();showToast('Log your match result!')">Mark as Played ✓</button>
-          <button class="match-sec-btn" onclick="openDeleteConfirm('match','Scheduled vs Lisa M. &amp; Dana R.')">Cancel</button>
+          <button class="save-btn" style="flex:1;margin-top:0;" onclick="openEditScheduledMatch()">&#9999;&#65039; Edit or Mark as Played</button>
+          <button class="match-sec-btn" style="color:#e53e3e;border-color:#e53e3e;" onclick="closeOverlay('scheduledOverlay');openDeleteConfirm('Scheduled Match','vs. Lisa M. &amp; Dana R.')">🗑 Delete Match</button>
         </div>
       </div>
     </div>
@@ -2189,6 +2492,7 @@ function openDeleteFromEdit(context) {
       </div>
       <div class="lf-pane" id="tab-practice">
         <div class="lf-row"><div class="lf-field"><label class="lf-label">Date</label><input class="lf-input" type="date" value="2026-02-27"></div><div class="lf-field"><label class="lf-label">Duration</label><input class="lf-input" type="text" placeholder="e.g. 1h 30m"></div></div>
+        <div class="lf-field"><label class="lf-label">Other Players</label><input class="lf-input" type="text" placeholder="e.g. Jess T., Mara K."></div>
         <div class="lf-field"><label class="lf-label">Location</label><input class="lf-input" type="text" placeholder="e.g. Bayshore TC"></div>
         <div class="lf-field"><label class="lf-label">Surface</label><div class="lf-pills"><div class="lf-pill on" onclick="lfPillRadio(this)">Hard</div><div class="lf-pill" onclick="lfPillRadio(this)">Clay</div><div class="lf-pill" onclick="lfPillRadio(this)">Grass</div></div></div>
         <div class="lf-field"><label class="lf-label">Goals Worked On</label>
@@ -2215,6 +2519,78 @@ function openDeleteFromEdit(context) {
       <button class="del-confirm-btn" onclick="closeOverlay('deleteOverlay');showToast('🗑️ Deleted.')">Yes, Delete Permanently</button>
       <button class="del-cancel-btn" onclick="closeOverlay('deleteOverlay')">Cancel — Keep It</button>
       </div><!-- /sheet-body -->
+    </div>
+  </div>
+
+  <!-- ══ JOURNAL ENTRY DETAIL ══ -->
+  <div class="overlay" id="journalDetailOverlay">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-hd">
+        <div class="sheet-title" id="jdTitle">Entry Detail</div>
+        <button class="sheet-close" onclick="closeOverlay('journalDetailOverlay')">✕</button>
+      </div>
+      <div class="sheet-body" id="jdBody"></div>
+    </div>
+  </div>
+
+  <!-- ══ JOURNAL ENTRY EDIT ══ -->
+  <div class="overlay" id="journalEditOverlay">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-hd">
+        <div class="sheet-title" id="jeTitle">Edit Entry</div>
+        <button class="sheet-close" onclick="closeOverlay('journalEditOverlay')">✕</button>
+      </div>
+      <div class="sheet-body" id="jeBody"></div>
+    </div>
+  </div>
+
+  <!-- ══ SCOUT EDIT ══ -->
+  <div class="overlay" id="scoutEditOverlay">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-hd">
+        <div class="sheet-title" id="scoutEditTitle">Edit Opponent</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button onclick="closeOverlay('scoutEditOverlay');openDeleteConfirm('opponent','this opponent')" style="background:var(--red-bg);color:var(--red);border:none;border-radius:var(--r-sm);padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;">Delete</button>
+          <button class="sheet-close" onclick="closeOverlay('scoutEditOverlay')">✕</button>
+        </div>
+      </div>
+      <div class="sheet-body">
+        <div class="lf-field"><label class="lf-label">Name</label><input class="lf-input" type="text" id="se-name"></div>
+        <div class="lf-field"><label class="lf-label">Dominant Hand</label>
+          <div style="display:flex;gap:10px;">
+            <div class="lf-pill" style="flex:1;text-align:center;" onclick="lfPillRadio(this)">🤚 Lefty</div>
+            <div class="lf-pill on" style="flex:1;text-align:center;" onclick="lfPillRadio(this)">Righty ✋</div>
+          </div>
+        </div>
+        <div class="tag-group-lbl str">💪 Strengths</div>
+        <div class="tag-select-grid">
+          <div class="tag-sel str" onclick="toggleTagSel(this)">Strong Forehand</div>
+          <div class="tag-sel str" onclick="toggleTagSel(this)">Strong Backhand</div>
+          <div class="tag-sel str" onclick="toggleTagSel(this)">Aggressive Net Player</div>
+          <div class="tag-sel str" onclick="toggleTagSel(this)">Strong Serve</div>
+          <div class="tag-sel str" onclick="toggleTagSel(this)">Attacks Short Balls</div>
+          <div class="tag-sel str" onclick="toggleTagSel(this)">Very Consistent</div>
+          <div class="tag-sel str" onclick="toggleTagSel(this)">Good Movement</div>
+          <div class="tag-sel str" onclick="toggleTagSel(this)">Employs Slice Shots</div>
+        </div>
+        <div class="tag-group-lbl wk" style="margin-top:14px;">🎯 Weaknesses</div>
+        <div class="tag-select-grid">
+          <div class="tag-sel wk" onclick="toggleTagSel(this)">Weak Serve</div>
+          <div class="tag-sel wk" onclick="toggleTagSel(this)">Inconsistent Forehand</div>
+          <div class="tag-sel wk" onclick="toggleTagSel(this)">Inconsistent Backhand</div>
+          <div class="tag-sel wk" onclick="toggleTagSel(this)">Poor Net Game</div>
+          <div class="tag-sel wk" onclick="toggleTagSel(this)">Poor Movement</div>
+          <div class="tag-sel wk" onclick="toggleTagSel(this)">Defensive Baseline Player</div>
+          <div class="tag-sel wk" onclick="toggleTagSel(this)">Mental Momentum Swings</div>
+          <div class="tag-sel wk" onclick="toggleTagSel(this)">Struggles Under Pressure</div>
+        </div>
+        <div class="tag-group-lbl neu" style="margin-top:14px;">📝 Notes</div>
+        <textarea class="notes-area" id="se-notes" placeholder="e.g. Very tall, uses kick serve…"></textarea>
+        <button class="save-btn" onclick="closeOverlay('scoutEditOverlay');showToast('✅ Opponent updated!')">Save Changes</button>
+      </div>
     </div>
   </div>
 
